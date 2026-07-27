@@ -1,7 +1,7 @@
 # ⛪ Church Website
 
 > **Live Site:** *(coming soon)*
-> **Built for:** Iglesia de Dios Pentecostal M.I
+> **Built for:** Iglesia de Dios M.I
 > **Status:** ✅ Website live &nbsp;|&nbsp; 🚧 Backend & automation in progress
 
 ---
