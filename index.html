@@ -1502,24 +1502,28 @@
         <div class="map-pin">📍 Encuéntranos en el Mapa</div>
       </a>
     </div>
-    <div class="contact-form reveal">
+    <form class="contact-form reveal" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <p style="display:none">
+        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+      </p>
       <div class="form-row">
         <div class="form-group">
           <label for="fname">Nombre</label>
-          <input type="text" id="fname" placeholder="Juan" />
+          <input type="text" id="fname" name="fname" placeholder="Juan" required />
         </div>
         <div class="form-group">
           <label for="lname">Apellido</label>
-          <input type="text" id="lname" placeholder="García" />
+          <input type="text" id="lname" name="lname" placeholder="García" required />
         </div>
       </div>
       <div class="form-group">
         <label for="email">Correo Electrónico</label>
-        <input type="email" id="email" placeholder="juan@ejemplo.com" />
+        <input type="email" id="email" name="email" placeholder="juan@ejemplo.com" required />
       </div>
       <div class="form-group">
         <label for="subject">Asunto</label>
-        <select id="subject">
+        <select id="subject" name="subject">
           <option>Pregunta General</option>
           <option>Planear una Visita</option>
           <option>Petición de Oración</option>
@@ -1529,10 +1533,10 @@
       </div>
       <div class="form-group">
         <label for="message">Mensaje</label>
-        <textarea id="message" placeholder="¿Cómo le podemos ayudar?"></textarea>
+        <textarea id="message" name="message" placeholder="¿Cómo le podemos ayudar?" required></textarea>
       </div>
-      <button type="button" class="btn-primary btn-form">Enviar Mensaje</button>
-    </div>
+      <button type="submit" class="btn-primary btn-form">Enviar Mensaje</button>
+    </form>
   </div>
 </section>
 
