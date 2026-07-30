@@ -207,12 +207,14 @@
   #home {
     height: 100vh;
     min-height: 600px;
+    padding-top: 80px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
+    box-sizing: border-box;
   }
 
   .hero-bg {
@@ -320,6 +322,10 @@
     border: none;
     cursor: pointer;
     transition: background 0.25s, transform 0.2s;
+    display: inline-block;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
   }
 
   .btn-primary:hover {
@@ -734,20 +740,25 @@
 
   .fb-embed-wrap {
     max-width: 524px;
+    width: 100%;
     margin: 0 auto;
     background: #fff;
     border: 1px solid var(--border-light);
     padding: var(--space-sm);
     box-shadow: 0 4px 20px rgba(206, 1, 0, 0.06);
     text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .fb-embed-wrap .fb-page {
     display: inline-block !important;
+    width: 100% !important;
     max-width: 100%;
   }
 
   .fb-embed-wrap iframe {
+    width: 100% !important;
     max-width: 100% !important;
   }
 
@@ -1099,6 +1110,38 @@
 
     .collage-photo-3 {
       display: none;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .hero-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .hero-buttons a {
+      width: 100%;
+      text-align: center;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .value-item {
+      padding: var(--space-md);
+    }
+
+    .contact-detail {
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-outline {
+      width: 100%;
+      padding: 0.85rem var(--space-md);
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
     }
   }
 </style>
