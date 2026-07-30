@@ -905,6 +905,17 @@
     margin-top: var(--space-lg);
   }
 
+  .fb-embed-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid var(--border-light);
+    padding: var(--space-sm);
+    box-shadow: 0 4px 20px rgba(206, 1, 0, 0.06);
+    display: flex;
+    justify-content: center;
+  }
+
   /* ═══════════════════════════════════════════════════════════════ */
   /* CONTACT                                                         */
   /* ═══════════════════════════════════════════════════════════════ */
@@ -1422,48 +1433,28 @@
       <h2 class="section-title">Mensajes &amp; <em>Medios</em></h2>
       <div class="section-divider centered"></div>
     </div>
-    <div class="sermons-grid">
-      <div class="sermon-featured reveal">
-        <div class="sermon-featured-img">
-          <img src="https://images.unsplash.com/photo-1505455184862-554165e5f6ba?w=700&auto=format&fit=crop" alt="Último Mensaje" />
-        </div>
-        <div class="sermon-featured-body">
-          <div class="sermon-tag">Último Mensaje · 16 Feb, 2026</div>
-          <h3 class="sermon-title">La Luz que Nunca se Apaga</h3>
-          <div class="sermon-meta">Pastor · Juan 8:12</div>
-          <p class="sermon-desc">En un mundo lleno de incertidumbre, descubrimos lo que significa caminar en la luz eterna de Cristo y encontrar nuestra identidad en Él.</p>
-          <a href="https://www.facebook.com/people/Iglesia-de-Dios-MI-Soledad/100077021634023/?locale=es_LA" target="_blank" class="play-btn">
-            <span class="play-icon"></span> Ver Mensaje
-          </a>
-        </div>
-      </div>
-      <div class="sermon-card reveal reveal-delay-1">
-        <div class="sermon-num">01</div>
-        <div>
-          <div class="sermon-card-title">Evangelización con Propósito</div>
-          <div class="sermon-card-meta">15 Feb · Lucas 14:10</div>
-          <a href="https://www.facebook.com/watch/?v=929859399577799" target="_blank" class="sermon-card-link">▷ Escuchar</a>
-        </div>
-      </div>
-      <div class="sermon-card reveal reveal-delay-2">
-        <div class="sermon-num">02</div>
-        <div>
-          <div class="sermon-card-title">El Hijo Pródigo y el Padre</div>
-          <div class="sermon-card-meta">2 Feb · Lucas 15:11–32</div>
-          <a href="#" class="sermon-card-link">▷ Escuchar</a>
-        </div>
-      </div>
-      <div class="sermon-card reveal reveal-delay-3">
-        <div class="sermon-num">03</div>
-        <div>
-          <div class="sermon-card-title">Fe en el Desierto</div>
-          <div class="sermon-card-meta">26 Ene · Deuteronomio 8</div>
-          <a href="#" class="sermon-card-link">▷ Escuchar</a>
-        </div>
+    <div class="fb-embed-wrap reveal">
+      <div id="fb-root"></div>
+      <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v21.0">
+      </script>
+
+      <div class="fb-page"
+        data-href="https://www.facebook.com/profile.php?id=100077021634023"
+        data-tabs="timeline"
+        data-width=""
+        data-height="700"
+        data-small-header="false"
+        data-adapt-container-width="true"
+        data-hide-cover="false"
+        data-show-facepile="false">
+        <blockquote cite="https://www.facebook.com/profile.php?id=100077021634023" class="fb-xfbml-parse-ignore">
+          <a href="https://www.facebook.com/profile.php?id=100077021634023">Iglesia de Dios Pentecostal M.I Soledad</a>
+        </blockquote>
       </div>
     </div>
     <div class="section-center mt-large">
-      <a href="https://www.facebook.com/people/Iglesia-de-Dios-MI-Soledad/100077021634023/?locale=es_LA" target="_blank" class="btn-primary">Ver Todos los Mensajes</a>
+      <a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank" class="btn-primary">Ver Todos los Mensajes</a>
     </div>
   </div>
 </section>
@@ -1564,7 +1555,7 @@
     <div>
       <div class="footer-heading">Conéctate</div>
       <ul class="footer-links">
-        <li><a href="https://www.facebook.com/people/Iglesia-de-Dios-MI-Soledad/100077021634023/?locale=es_LA" target="_blank">Facebook</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank">Facebook</a></li>
       </ul>
     </div>
   </div>
