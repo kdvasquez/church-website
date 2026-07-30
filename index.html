@@ -906,19 +906,19 @@
   }
 
   .fb-embed-wrap {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
     background: #fff;
     border: 1px solid var(--border-light);
     padding: var(--space-sm);
     box-shadow: 0 4px 20px rgba(206, 1, 0, 0.06);
-    display: flex;
-    justify-content: center;
+    overflow-x: auto;
   }
 
   .fb-embed-wrap .fb-page,
   .fb-embed-wrap iframe {
     width: 100% !important;
+    max-width: 880px;
   }
 
   /* ═══════════════════════════════════════════════════════════════ */
@@ -1044,7 +1044,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AHVAwerpgTDPRbrXxsUbRfiBeKPM0j_DQSkFSHO3440gJ27jTsDvKM_UKhmYmdz_-8b53RwYM4tCrzu2TnbkMr35dWBwi72Q-XyUAPvdHb7bpgy---ZVj3u8YqnnvKYj791lCu3Ulz8=s1360-w1360-h1020-rw');
+    background-image: url('img/map.png');
     background-size: cover;
     background-position: center;
     opacity: 0.4;
@@ -1447,7 +1447,7 @@
       <div class="fb-page"
         data-href="https://www.facebook.com/profile.php?id=100077021634023"
         data-tabs="timeline"
-        data-width=""
+        data-width="880"
         data-height="700"
         data-small-header="false"
         data-adapt-container-width="true"
