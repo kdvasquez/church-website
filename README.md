@@ -23,6 +23,7 @@ The site is being expanded with a Node.js backend that powers Facebook livestrea
 - Service times, About/Mission, Events, Sermons, and Contact sections
 - **Google Calendar integration** — public calendar embedded live; church staff add events directly in Google Calendar and the site updates automatically, no code changes needed
 - **Working contact form** — built on Netlify Forms (serverless form handling, spam protection via honeypot field, Reply-To automatically set to the visitor's email so replies go directly to them)
+- **Facebook livestream feed** — official Meta Page Plugin embedded in the Sermons section; automatically stays current with the Page's latest posts/videos with zero manual updates and zero backend
 - AI Sermon Notes Generator — paste any Facebook video URL and Claude generates:
   - Main scripture & verse text
   - Key sermon points
@@ -35,18 +36,13 @@ The site is being expanded with a Node.js backend that powers Facebook livestrea
 
 ### 🚧 In Progress — Priority Order SUBJECT TO CHANGE
 
-#### 1. 📺 Facebook Livestream → Auto Weekly Update
-- [ ] Meta Graph API integration (requires Facebook Editor access to church page)
-- [ ] Long-lived Page Access Token setup (exchanged server-side, never exposed to the client)
-- [ ] Backend fetches latest video/livestream link + title every week automatically
-- [ ] Sermons section updates with new link, thumbnail, and date — no manual work
-
-#### 2. 🤖 AI Sermon Notes — Full Pipeline
+#### 1. 🤖 AI Sermon Notes — Full Pipeline
 - [ ] Feed fetched livestream video/transcript directly into Claude
 - [ ] Auto-generate and auto-display structured sermon notes (no manual paste step)
 
 ### ✅ Decided — Not Building
-- **Contact form backend (Nodemailer):** Netlify Forms already handles this reliably for free, with Reply-To support. A custom Node/Express + Nodemailer route would demonstrate a skill already covered by the Facebook/Graph API backend work, so it's intentionally out of scope.
+- **Contact form backend (Nodemailer):** Netlify Forms already handles this reliably for free, with Reply-To support. A custom Node/Express + Nodemailer route would demonstrate a skill already covered by other backend work, so it's intentionally out of scope.
+- **Meta Graph API + Page Access Token for livestreams:** Originally planned, but requires phone-verifying a Facebook Business account and generating/maintaining a Page Access Token — both blockers given the church admin's account setup at the time. Instead, the **Facebook Page Plugin** (an official Meta-hosted embed, `developers.facebook.com/docs/plugins/page-plugin`) is used in the Sermons section. It requires zero authentication, zero tokens, and zero backend — Facebook's own script keeps it automatically up to date with the Page's latest posts and videos, so there's no manual weekly update step for church staff. The tradeoff: it renders in Facebook's native widget style rather than fully custom-styled cards, and it doesn't feed structured data into the AI sermon notes pipeline (see below). If Graph API access becomes viable later (e.g., admin account gets phone-verified), this can be revisited.
 
 ### 💡 Planned (Future)
 - [ ] AI sermon notes from transcript (low priority for now)
@@ -66,6 +62,7 @@ Browser → Netlify (static HTML/CSS/JS)
          ┌──────────────────────────┐
          │  Netlify Forms            │  ← Contact form (serverless, built-in)
          │  Google Calendar (embed)  │  ← Events (public calendar, no backend)
+         │  Facebook Page Plugin     │  ← Livestreams (Meta-hosted embed, no backend)
          └──────────────────────────┘
                 ↓
          Anthropic API (Claude)
@@ -73,21 +70,7 @@ Browser → Netlify (static HTML/CSS/JS)
          when user pastes a FB video URL
 ```
 
-### In Progress (Phase 2) — Backend
-```
-                    ┌─────────────────────────────┐
-                    │   Node.js Server (Render.com)│
-                    │                             │
-Facebook Page ─────►│ Meta Graph API → Latest     │
-(Editor access)     │ livestream link + title      │
-                    └──────────────┬──────────────┘
-                                   │
-                              Church Website
-                              (Netlify)
-                         displays everything live
-```
-
-### Future (Phase 3) — Full AI Pipeline
+### Future (Phase 2) — AI Pipeline
 ```
 Facebook Livestream
         ↓
@@ -101,6 +84,8 @@ Anthropic API (Claude Sonnet)
 Auto-displayed on website
 ```
 
+> **Note:** the AI pipeline above would require the Meta Graph API + Page Access Token (see "Decided — Not Building" above for why this isn't currently in place). Revisit if/when that becomes viable.
+
 ---
 
 ## 🛠 Tech Stack
@@ -112,9 +97,8 @@ Auto-displayed on website
 | AI (sermon notes) | Anthropic API — Claude Sonnet |
 | Events | Google Calendar (public embed, no backend) |
 | Contact form | Netlify Forms (serverless, built-in) |
-| Livestream updates | Meta Graph API + Node.js backend |
+| Livestream feed | Facebook Page Plugin (Meta-hosted embed, no backend) |
 | Frontend hosting | Netlify (free tier) |
-| Backend hosting | Render.com (free tier) |
 | Version control | GitHub |
 
 ---
@@ -122,7 +106,7 @@ Auto-displayed on website
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js v18+ (for the Facebook/AI backend piece only)
+- Node.js v18+ (only needed if/when the AI sermon notes pipeline is built)
 - A Facebook account with Editor access to the church page
 - Church Google Calendar made public (no API key needed for the embed)
 - Free account at [Anthropic](https://console.anthropic.com) (for AI sermon notes)
@@ -141,15 +125,9 @@ open index.html
 ```
 
 ### Environment Variables
-Create a `.env` file in the project root (see `.env.example`) — only needed once the Facebook/AI backend is built:
+Only needed if/when the AI sermon notes pipeline is built — the site currently runs with no secrets or backend at all. See `.env.example`:
 ```env
-# Meta Graph API (Facebook)
-FACEBOOK_PAGE_ID=your_page_id_here
-FACEBOOK_PAGE_ACCESS_TOKEN=your_token_here
-FACEBOOK_APP_ID=your_app_id_here
-FACEBOOK_APP_SECRET=your_app_secret_here
-
-# Anthropic (AI sermon notes)
+# Anthropic (AI sermon notes — future)
 ANTHROPIC_API_KEY=your_key_here
 
 PORT=3000
@@ -185,7 +163,6 @@ church-website/
 
 | What | Who provides it | How hard |
 |---|---|---|
-| Facebook Editor role | Church page admin | 30 seconds — Settings → Page Roles |
 | Google Calendar made public | Whoever manages the calendar | Calendar Settings → Access permissions |
 
 ---
@@ -203,14 +180,11 @@ church-website/
 3. Reply-To is set dynamically via a hidden `reply-to` field, populated with the visitor's email on submit
 4. Notifications configured under **Site settings → Notifications → Form submission notifications**
 
-### 3. Meta Graph API (Facebook Livestreams — in progress)
-1. Go to [developers.facebook.com](https://developers.facebook.com) → Create App → Business
-2. Add church Facebook page to the app
-3. Go to Tools → Graph API Explorer
-4. Select app + page → check permissions:
-   - `pages_read_engagement`
-   - `pages_show_list`
-5. Generate a long-lived Page Access Token (exchanged server-side, never exposed client-side)
+### 3. Facebook Page Plugin (Livestreams — done, no API key needed)
+1. Go to [developers.facebook.com/docs/plugins/page-plugin](https://developers.facebook.com/docs/plugins/page-plugin)
+2. Enter the church Page URL, set tabs to `timeline`, enable "Adapt Container Width"
+3. Copy the generated `<div class="fb-page">` + SDK `<script>` snippet into the site — no login, no token, no backend
+4. Facebook's own script keeps the embed automatically current; no maintenance required
 
 ### 4. Anthropic API (AI sermon notes)
 1. Go to [console.anthropic.com](https://console.anthropic.com)
