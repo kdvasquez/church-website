@@ -40,6 +40,8 @@
   ]
 }
 </script>
+<link rel="icon" type="image/png" href="img/churchlogo-removebg-preview.png" />
+<link rel="apple-touch-icon" href="img/churchlogo-removebg-preview.png" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 <style>
   /* ═══════════════════════════════════════════════════════════════ */
@@ -106,7 +108,6 @@
     padding: var(--space-md) 5%;
     background: rgba(253, 246, 246, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-light);
     transition: box-shadow 0.3s;
   }
 
@@ -205,9 +206,9 @@
   /* HERO SECTION                                                    */
   /* ═══════════════════════════════════════════════════════════════ */
   #home {
-    height: 100vh;
-    min-height: 600px;
-    padding-top: 80px;
+    height: calc(100vh - 140px);
+    min-height: 760px;
+    margin-top: 140px;
     position: relative;
     display: flex;
     align-items: center;
@@ -215,6 +216,7 @@
     text-align: center;
     overflow: hidden;
     box-sizing: border-box;
+    padding-bottom: 100px;
   }
 
   .hero-bg {
@@ -285,7 +287,7 @@
 
   .hero-scroll {
     position: absolute;
-    bottom: var(--space-xl);
+    bottom: var(--space-lg);
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -297,6 +299,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     animation: fadeUp 1s ease 0.9s both;
+    z-index: 1;
   }
 
   .hero-scroll .arrow {
@@ -1055,13 +1058,17 @@
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 65px;
+      top: 126px;
       left: 0;
       right: 0;
       background: var(--cream);
       border-bottom: 1px solid var(--border-light);
       padding: var(--space-md) 5%;
       gap: var(--space-md);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      z-index: 99;
+      max-height: calc(100vh - 126px);
+      overflow-y: auto;
     }
 
     .about-inner {
@@ -1110,6 +1117,10 @@
 
     .collage-photo-3 {
       display: none;
+    }
+
+    .hero-tagline {
+      margin-bottom: var(--space-lg);
     }
   }
 
