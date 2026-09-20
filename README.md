@@ -1,74 +1,44 @@
-# ⛪ Church Website
+# Iglesia de Dios Pentecostal M.I. Soledad
 
-**Live Site:** *(add your Netlify URL here)*
-**Built for:** Iglesia de Dios Pentecostal M.I. Soledad
+A simple, welcoming website for our church community in Soledad, California. Built in Spanish to help visitors find service times, learn about the church, see upcoming events, and get in touch.
 
-A bilingual church website built for a real congregation — sharing service times, events, sermons, and contact info with the local Spanish-speaking community.
+## What's included
 
----
+- Service times, church information, and directions
+- A Google Calendar embed for upcoming events
+- A Facebook feed and links to church messages
+- A contact form configured for Netlify Forms
+- Responsive layouts for phones and computers
 
-## ✨ What It Does
+Built with HTML, CSS, and JavaScript. No framework, dependencies, or build step required.
 
-- 📅 **Events** — pulled live from a public Google Calendar. Church staff add events directly in Google Calendar; the website updates automatically.
-- ✉️ **Contact form** — powered by Netlify Forms. No backend needed, and replies go straight to the visitor's email.
-- 📺 **Livestreams** — embedded via the official Facebook Page Plugin. Always shows the latest posts/videos automatically, with zero manual updates.
-- 🎨 Fully responsive, Spanish-language design with a custom red & cream color palette.
+## Preview locally
 
----
+Open `index.html` in your browser. The calendar and Facebook feed need an internet connection; contact form submissions need a Netlify deployment with form detection enabled.
 
-## 🎯 The Goal (In Progress)
+## Deploy to Netlify
 
-The next big piece: **AI-generated sermon notes.**
+1. Commit your changes and push them to the `main` branch on [GitHub](https://github.com/kdvasquez/church-website).
+2. Sign in to [Netlify](https://app.netlify.com/) and choose **Add new project → Import an existing project**.
+3. Connect GitHub and select `kdvasquez/church-website`.
+4. Use these deployment settings:
+   - **Production branch:** `main`
+   - **Base directory:** leave blank
+   - **Build command:** leave blank
+   - **Publish directory:** `.` (the repository root)
+5. Deploy the project. Future pushes to `main` will deploy automatically.
+6. In **Forms**, enable form detection if needed, then redeploy. Confirm that the `contact` form appears and submit a test message from the published site.
+7. Set up form email notifications for the church inbox if you want messages delivered by email.
 
-The plan is to build a small **Node.js backend** that talks to the **Meta Graph API** to pull the church's latest livestream video, then send that video/transcript to **Claude (Anthropic's AI)** to automatically generate:
+If this repository is already connected to a Netlify project, use that project instead of creating another one.
 
-- Key scripture references
-- Main sermon points
-- Reflection questions
-- A practical weekly takeaway
+The site currently references `https://iddpmisoledad.netlify.app/`. Confirm that this is your published address, or update the URLs in `index.html`, `robots.txt`, and `sitemap.xml` to match.
 
-...all in Spanish, and all without anyone having to write notes by hand.
+## Keeping it up to date
 
-**Why this isn't built yet:** the Graph API requires a verified Facebook Business account and an access token, and that verification is currently blocked on the admin's end. Once that's resolved, this becomes the main focus.
+- Edit `index.html` to update service times, contact details, and church information.
+- Add or replace photos in `img/`; resize and compress large images before uploading.
+- Manage events in the linked Google Calendar, and make sure visitors can view it without signing in.
+- Check the Facebook feed and contact form on the live site before sharing it with the congregation.
 
----
-
-## 🛠 Built With
-
-| Layer | Tool |
-|---|---|
-| Frontend | HTML, CSS, JavaScript (no framework) |
-| Fonts | Google Fonts |
-| Events | Google Calendar (public embed) |
-| Contact form | Netlify Forms |
-| Livestreams | Facebook Page Plugin |
-| Hosting | Netlify |
-| AI (planned) | Anthropic Claude |
-| Backend (planned) | Node.js + Meta Graph API |
-
----
-
-## 🚀 Running It Locally
-
-```bash
-git clone https://github.com/kdvasquez/church-website.git
-cd church-website
-open index.html
-```
-
-That's it — it's a single HTML file, no build step required.
-
-To deploy: push to GitHub, then connect the repo in Netlify (auto-deploys on every push).
-
----
-
-## 👤 Author
-
-**Karla Vasquez**
-[github.com/kdvasquez](https://github.com/kdvasquez) · [kdvasquez.github.io](https://kdvasquez.github.io)
-
----
-
-## 📄 License
-
-MIT — feel free to use this as a template for your own church or community website.
+Created by [Karla Vasquez](https://github.com/kdvasquez).
