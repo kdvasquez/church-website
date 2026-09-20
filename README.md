@@ -1,4 +1,4 @@
-# Iglesia de Dios Pentecostal M.I. Soledad
+# Iglesia de Dios M.I. Soledad
 
 A simple, welcoming website for our church community in Soledad, California. Built in Spanish to help visitors find service times, learn about the church, see upcoming events, and get in touch.
 
