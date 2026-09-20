@@ -83,6 +83,7 @@
   }
 
   html {
+    scroll-padding-top: var(--nav-height, 140px);
     scroll-behavior: smooth;
   }
 
@@ -193,6 +194,14 @@
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
+    background: transparent;
+    border: 0;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
   }
 
   .hamburger span {
@@ -208,7 +217,7 @@
   #home {
     height: calc(100vh - 140px);
     min-height: 760px;
-    margin-top: 140px;
+    margin-top: var(--nav-height, 140px);
     position: relative;
     display: flex;
     align-items: center;
@@ -501,8 +510,11 @@
     position: absolute;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(26, 0, 0, 0.18);
-    opacity: 0;
     transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .about-collage.pending .collage-photo {
+    opacity: 0;
   }
 
   .collage-photo img {
@@ -1020,9 +1032,12 @@
   }
 
   .reveal {
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.pending {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
   .reveal.visible {
@@ -1045,20 +1060,28 @@
   /* ═══════════════════════════════════════════════════════════════ */
   /* RESPONSIVE                                                      */
   /* ═══════════════════════════════════════════════════════════════ */
-  @media (max-width: 900px) {
-    .nav-links {
+  @media (max-width: 1100px) {
+    nav { flex-wrap: wrap; }
+    nav .nav-logo { font-size: 1.1rem; gap: 8px; }
+    nav .logo-img { width: 56px; }
+    .nav-links { flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+    nav:not(.menu-ready) { position: static; }
+    nav:not(.menu-ready) + #home { margin-top: 0; }
+
+    .menu-ready .nav-links {
       display: none;
     }
 
-    .hamburger {
+    .menu-ready .hamburger {
       display: flex;
     }
 
-    .nav-links.open {
+    .menu-ready .nav-links.open {
+      margin-top: 0;
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 126px;
+      top: var(--nav-height, 126px);
       left: 0;
       right: 0;
       background: var(--cream);
@@ -1067,7 +1090,8 @@
       gap: var(--space-md);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
       z-index: 99;
-      max-height: calc(100vh - 126px);
+      max-height: calc(100vh - var(--nav-height, 126px));
+      max-height: calc(100dvh - var(--nav-height, 126px));
       overflow-y: auto;
     }
 
@@ -1155,14 +1179,25 @@
       letter-spacing: 0.05em;
     }
   }
+  :focus-visible { outline: 3px solid #CE0100; outline-offset: 4px; }
+  .skip-link { position: fixed; top: -100px; left: 16px; z-index: 200; background: white; color: #1a0000; padding: 12px; }
+  .skip-link:focus { top: 12px; }
+  .contact-detail-text a { color: var(--red); overflow-wrap: anywhere; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal.pending, .about-collage.pending .collage-photo { opacity: 1; }
+    .reveal { transform: none; }
+  }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav id="navbar">
+<a class="skip-link" href="#home">Saltar al contenido</a>
+<nav id="navbar" aria-label="Navegación principal">
   <a href="#home" class="nav-logo">
-    <img src="img/churchlogo-removebg-preview.png" alt="Logo" class="logo-img">
+    <img src="img/churchlogo-removebg-preview.png" alt="Logo de IDDPMI Soledad" class="logo-img">
     IDDPMI Soledad
   </a>
   <ul class="nav-links" id="navLinks">
@@ -1172,13 +1207,13 @@
     <li><a href="#sermons">Mensajes</a></li>
     <li><a href="#contact" class="nav-cta">Visítanos</a></li>
   </ul>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <button type="button" class="hamburger" id="hamburger" aria-label="Abrir menú" aria-controls="navLinks" aria-expanded="false">
+    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+  </button>
 </nav>
 
 <!-- HERO -->
-<section id="home">
+<section id="home" tabindex="-1">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -1231,13 +1266,13 @@
       <div class="collage-frame"></div>
 
       <div class="collage-photo collage-photo-1">
-        <img src="img/group.jpg" title="Foto: Alfred Quintanilla" alt="Comunidad" />
+        <img src="img/group.jpg" loading="lazy" decoding="async" title="Foto: Alfred Quintanilla" alt="Comunidad" />
       </div>
       <div class="collage-photo collage-photo-2">
-        <img src="img/church-cover2.jpg" alt="Alabanza" />
+        <img src="img/church-cover2.jpg" loading="lazy" decoding="async" alt="Alabanza" />
       </div>
       <div class="collage-photo collage-photo-3">
-        <img src="img/church-cover5.jpg" alt="Mensaje" />
+        <img src="img/church-cover5.jpg" loading="lazy" decoding="async" alt="Mensaje" />
       </div>
     </div>
 
@@ -1296,10 +1331,10 @@
       <div class="section-label">Involúcrate</div>
       <h2 class="section-title">Próximos <em>Eventos</em></h2>
     </div>
-    <a href="https://calendar.google.com/calendar/u/0/r?cid=fe10dd07db11cf0d243c80302bf0e8601567e25f5f39f42bc12a0b03efe173c2@group.calendar.google.com" target="_blank" class="btn-primary">Ver Calendario Completo</a>
+    <a href="https://calendar.google.com/calendar/u/0/r?cid=fe10dd07db11cf0d243c80302bf0e8601567e25f5f39f42bc12a0b03efe173c2@group.calendar.google.com" target="_blank" class="btn-primary" rel="noopener noreferrer">Ver Calendario Completo</a>
   </div>
   <div class="calendar-embed-wrap reveal">
-    <iframe src="https://calendar.google.com/calendar/embed?src=fe10dd07db11cf0d243c80302bf0e8601567e25f5f39f42bc12a0b03efe173c2%40group.calendar.google.com&ctz=America%2FLos_Angeles" style="border: 0" frameborder="0" scrolling="no"></iframe>
+    <iframe src="https://calendar.google.com/calendar/embed?src=fe10dd07db11cf0d243c80302bf0e8601567e25f5f39f42bc12a0b03efe173c2%40group.calendar.google.com&ctz=America%2FLos_Angeles" title="Calendario de eventos de la iglesia" loading="lazy" style="border: 0"></iframe>
   </div>
 </section>
 
@@ -1323,7 +1358,7 @@
         data-width="500"
         data-height="700"
         data-small-header="false"
-        data-adapt-container-width="false"
+        data-adapt-container-width="true"
         data-hide-cover="false"
         data-show-facepile="false">
         <blockquote cite="https://www.facebook.com/profile.php?id=100077021634023" class="fb-xfbml-parse-ignore">
@@ -1332,7 +1367,7 @@
       </div>
     </div>
     <div class="section-center mt-large">
-      <a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank" class="btn-primary">Ver Todos los Mensajes</a>
+      <a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank" class="btn-primary" rel="noopener noreferrer">Ver Todos los Mensajes</a>
     </div>
   </div>
 </section>
@@ -1357,39 +1392,38 @@
         <div class="contact-icon">📞</div>
         <div class="contact-detail-text">
           <strong>Teléfono</strong>
-          <span>(831) 287-7965</span>
+          <a href="tel:+18312877965">831-287-7965</a>
         </div>
       </div>
       <div class="contact-detail reveal reveal-delay-2">
         <div class="contact-icon">✉</div>
         <div class="contact-detail-text">
           <strong>Correo Electrónico</strong>
-          <span>iddpmisoledad@gmail.com</span>
+          <a href="mailto:iddpmisoledad@gmail.com">iddpmisoledad@gmail.com</a>
         </div>
       </div>
-      <a href="https://www.google.com/maps/search/310+Main+St,+Soledad,+CA+93960" target="_blank" class="map-placeholder">
+      <a href="https://www.google.com/maps/search/310+Main+St,+Soledad,+CA+93960" target="_blank" class="map-placeholder" rel="noopener noreferrer">
         <div class="map-pin">📍 Encuéntranos en el Mapa</div>
       </a>
     </div>
-    <form class="contact-form reveal" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+    <form class="contact-form reveal" name="contact" method="POST" action="/gracias.html" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
       <input type="hidden" name="form-name" value="contact" />
-      <input type="hidden" name="reply-to" id="replyToField" />
       <p style="display:none">
         <label>Don't fill this out if you're human: <input name="bot-field" /></label>
       </p>
       <div class="form-row">
         <div class="form-group">
           <label for="fname">Nombre</label>
-          <input type="text" id="fname" name="fname" placeholder="Juan" required />
+          <input type="text" id="fname" name="fname" autocomplete="given-name" placeholder="Juan" required />
         </div>
         <div class="form-group">
           <label for="lname">Apellido</label>
-          <input type="text" id="lname" name="lname" placeholder="García" required />
+          <input type="text" id="lname" name="lname" autocomplete="family-name" placeholder="García" required />
         </div>
       </div>
       <div class="form-group">
         <label for="email">Correo Electrónico</label>
-        <input type="email" id="email" name="email" placeholder="juan@ejemplo.com" required />
+        <input type="email" id="email" name="email" autocomplete="email" placeholder="juan@ejemplo.com" required />
       </div>
       <div class="form-group">
         <label for="subject">Asunto</label>
@@ -1415,7 +1449,7 @@
   <div class="footer-top">
     <div class="footer-brand">
       <a href="#home" class="nav-logo">
-        <img src="img/churchlogo-removebg-preview.png" alt="Logo" class="logo-img">
+        <img src="img/churchlogo-removebg-preview.png" alt="Logo de IDDPMI Soledad" class="logo-img">
         Iglesia de Dios Pentecostal M.I Soledad
       </a>
       <p>Una iglesia en pleno desarrollo, predicando la Palabra de Dios y sirviendo a la comunidad de Soledad con amor.</p>
@@ -1433,8 +1467,8 @@
     <div>
       <div class="footer-heading">Conéctate</div>
       <ul class="footer-links">
-        <li><a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank">Facebook</a></li>
-        <li><a href="tel:+18312877965">(831) 287-7965</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=100077021634023" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        <li><a href="tel:+18312877965">831-287-7965</a></li>
         <li><a href="mailto:iddpmisoledad@gmail.com">iddpmisoledad@gmail.com</a></li>
       </ul>
     </div>
@@ -1445,49 +1479,58 @@
 </footer>
 
 <script>
-  // Sticky nav shadow
   const navbar = document.getElementById('navbar');
+  const navLinks = document.getElementById('navLinks');
+  const menuButton = document.getElementById('hamburger');
+
+  function setMenu(open) {
+    navLinks.classList.toggle('open', open);
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  }
+  menuButton.addEventListener('click', () => {
+    setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setMenu(false));
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      menuButton.focus();
+    }
+  });
+  navbar.classList.add('menu-ready');
+
+  function updateNavHeight() {
+    document.documentElement.style.setProperty('--nav-height', `${navbar.offsetHeight}px`);
+  }
+  updateNavHeight();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(updateNavHeight).observe(navbar);
+  }
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1100) setMenu(false);
+    updateNavHeight();
+  });
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
-  });
+  }, { passive: true });
 
-  // Mobile menu
-  function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('open');
-  }
-  document.querySelectorAll('#navLinks a').forEach(a => {
-    a.addEventListener('click', () => {
-      document.getElementById('navLinks').classList.remove('open');
-    });
-  });
-
-  // Scroll reveal (general)
-  const reveals = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
-  reveals.forEach(el => revealObserver.observe(el));
-
-  // Collage slide-in animation
-  const collage = document.getElementById('aboutCollage');
-  const collageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        collage.classList.add('visible');
-        collageObserver.unobserve(collage);
-      }
-    });
-  }, { threshold: 0.2 });
-  collageObserver.observe(collage);
-  // Contact form: set reply-to from visitor's email before submit
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', () => {
-      const emailInput = document.getElementById('email');
-      const replyToField = document.getElementById('replyToField');
-      if (emailInput && replyToField) {
-        replyToField.value = emailInput.value;
-      }
+  // Keep all content visible without JavaScript or animation support.
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('pending');
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0 });
+    document.querySelectorAll('.reveal, .about-collage').forEach(element => {
+      observer.observe(element);
+      element.classList.add('pending');
     });
   }
 </script>

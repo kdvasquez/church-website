@@ -18,6 +18,8 @@ Open `index.html` in your browser. The calendar and Facebook feed need an intern
 
 ## Deploy to Netlify
 
+`netlify.toml` sets the publish directory to the repository root with no build command.
+
 1. Commit your changes and push them to the `main` branch on [GitHub](https://github.com/kdvasquez/church-website).
 2. Sign in to [Netlify](https://app.netlify.com/) and choose **Add new project → Import an existing project**.
 3. Connect GitHub and select `kdvasquez/church-website`.
@@ -28,9 +30,12 @@ Open `index.html` in your browser. The calendar and Facebook feed need an intern
    - **Publish directory:** `.` (the repository root)
 5. Deploy the project. Future pushes to `main` will deploy automatically.
 6. In **Forms**, enable form detection if needed, then redeploy. Confirm that the `contact` form appears and submit a test message from the published site.
+   Successful submissions redirect to the Spanish confirmation page, `gracias.html`.
 7. Set up form email notifications for the church inbox if you want messages delivered by email.
 
 If this repository is already connected to a Netlify project, use that project instead of creating another one.
+
+The contact number is **831-287-7965** throughout the site.
 
 The site currently references `https://iddpmisoledad.netlify.app/`. Confirm that this is your published address, or update the URLs in `index.html`, `robots.txt`, and `sitemap.xml` to match.
 
