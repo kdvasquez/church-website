@@ -155,28 +155,31 @@
       <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(e.date))}</span></div>`;
   }
 
-  const WEEK_TITLES = ['Esta semana', 'Semana pasada', 'Hace dos semanas'];
+  const WEEK_TITLES = ['Esta semana', 'Semana pasada', 'Hace 2 semanas'];
+  const fmtDM = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', '');
   function renderWeeks(weeks) {
     $('weeks').innerHTML = weeks.map(({ w, i, list }) => `
       <div class="week ${list.length ? '' : 'empty-week'}">
-        <h3>${WEEK_TITLES[i]} <small>Semana del ${esc(fmtDayMonth(w))} · ${list.length} ${list.length === 1 ? 'canción' : 'canciones'}</small></h3>
+        <h3><span>${WEEK_TITLES[i]}</span><small>${esc(fmtDM(w))}</small></h3>
         <ul>${list.length ? list.map(e => {
           const s = songById(e.songId);
           const confirm = pendingDelete === e.id;
           return `
           <li class="${e.songOfWeek ? 'sotw-row' : ''}">
             <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-entry="${esc(e.id)}"
-              aria-pressed="${e.songOfWeek}" title="${e.songOfWeek ? 'Quitar estrella' : 'Canción de la semana'}"
-              aria-label="Canción de la semana: ${esc(s.song)}">★</button>
+              aria-pressed="${e.songOfWeek}" title="Canción de la semana" aria-label="Canción de la semana: ${esc(s.song)}">★</button>
+            <span class="gdot ${s.genre}" title="${GENRE_NAME[s.genre]}" aria-label="${GENRE_NAME[s.genre]}"></span>
             <div class="song-main">
               <strong>${esc(s.song)}</strong>
-              <small>${s.artist ? esc(s.artist) + ' ·' : ''} <span class="badge ${s.genre}">${GENRE_NAME[s.genre]}</span>
-                ${s.key ? `<span class="key">${esc(s.key)}</span>` : ''} ${e.date !== w ? esc(fmtWeekday(e.date)) : ''}</small>
+              ${s.artist ? `<small>${esc(s.artist)}</small>` : ''}
             </div>
-            <button type="button" class="icon-btn edit" data-entry="${esc(e.id)}" title="Editar" aria-label="Editar: ${esc(s.song)}">✎</button>
-            <button type="button" class="icon-btn del ${confirm ? 'confirm' : ''}" data-entry="${esc(e.id)}"
-              title="Quitar de esta semana" aria-label="${confirm ? 'Confirmar quitar' : 'Quitar de esta semana'}: ${esc(s.song)}">${confirm ? '¿Quitar?' : '✕'}</button>
-          </li>`; }).join('') : (i === 0 ? 'Todavía no hay canciones esta semana.' : 'No se registraron canciones.')}
+            ${s.key ? `<span class="key">${esc(s.key)}</span>` : ''}
+            <span class="row-tools">
+              <button type="button" class="icon-btn edit" data-entry="${esc(e.id)}" title="Editar" aria-label="Editar: ${esc(s.song)}">✎</button>
+              <button type="button" class="icon-btn del ${confirm ? 'confirm' : ''}" data-entry="${esc(e.id)}"
+                title="Quitar de la semana" aria-label="${confirm ? 'Confirmar quitar' : 'Quitar de la semana'}: ${esc(s.song)}">${confirm ? '¿Quitar?' : '✕'}</button>
+            </span>
+          </li>`; }).join('') : '<li class="none">Sin canciones</li>'}
         </ul>
       </div>`).join('');
   }
