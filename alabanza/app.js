@@ -26,7 +26,6 @@
   const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9ñ ]/g, '').replace(/\s+/g, ' ').trim();
   const toDate = d => new Date(d + 'T12:00:00Z');
   const fmtDayMonth = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
-  const fmtWeekday = d => toDate(d).toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
   const fmtShort = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   const todayStr = () => { const n = new Date(); return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
   const weekOf = d => { const x = toDate(d); x.setUTCDate(x.getUTCDate() - x.getUTCDay()); return x.toISOString().slice(0, 10); };
