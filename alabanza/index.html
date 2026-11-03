@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Equipo de Alabanza | IDDPMI Soledad</title>
+<link rel="icon" type="image/png" href="/img/churchlogo-removebg-preview.png" />
+<link rel="apple-touch-icon" href="/img/churchlogo-removebg-preview.png" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --red: #CE0100;
+    --red-hover: #a00000;
+    --red-light: #FF5C5C;
+    --red-pale: #FDE8E8;
+    --red-dark: #1a0000;
+    --cream: #FFF7E8;
+    --off-white: #FDF6F6;
+    --ink: #2b2b2b;
+    --gray-dark: #4A4A4A;
+    --gray-medium: #6b6b6b;
+    --border-light: #E6D4B8;
+    --blue: #1F6FB8;
+    --blue-pale: #E6F0FA;
+
+    /* chart series (validated: all-pairs CVD-safe on white) */
+    --series-1: #CE0100;
+    --series-2: #1F6FB8;
+    --series-3: #D99A1E;
+    --series-4: #2E8F6E;
+    --series-other: #B9AFA3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Lora', Georgia, serif; background: var(--off-white); color: var(--gray-dark); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  [hidden] { display: none !important; }
+
+  .label {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 0.8rem;
+    letter-spacing: 0.3em; text-transform: uppercase; color: var(--red);
+  }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--red-dark); line-height: 1.2; }
+  h2 { font-size: 1.45rem; margin: 0.2rem 0 1rem; }
+  h2 em { font-style: italic; color: var(--red); }
+
+  /* Buttons */
+  .btn {
+    background: var(--red); color: #fff; border: 0; cursor: pointer;
+    padding: 0.8rem 1.4rem; min-height: 44px;
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.05rem;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.2s;
+  }
+  .btn:hover { background: var(--red-hover); }
+  .btn:disabled { opacity: 0.6; cursor: wait; }
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border-light); color: var(--gray-dark);
+    padding: 0.45rem 0.9rem; min-height: 40px; cursor: pointer; font-size: 0.9rem;
+  }
+  .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+
+  /* Lock screen */
+  #lock {
+    min-height: 100vh; display: grid; place-items: center; padding: 24px;
+    background: linear-gradient(rgba(26,0,0,0.55), rgba(26,0,0,0.75)), url(/img/background.jpg) center/cover;
+  }
+  .lock-card {
+    width: 100%; max-width: 400px; background: var(--cream); padding: 2.25rem 2rem;
+    border-top: 4px solid var(--red); text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .lock-card img { width: 84px; margin-bottom: 0.75rem; }
+  .lock-card h1 { font-size: 1.7rem; margin: 0.35rem 0 0.5rem; }
+  .lock-card p { font-size: 0.95rem; color: var(--gray-medium); margin-bottom: 1.4rem; }
+  .lock-card input {
+    width: 100%; padding: 0.85rem; border: 1px solid var(--border-light); background: #fff;
+    font-size: 1.05rem; text-align: center; letter-spacing: 0.15em; margin-bottom: 0.9rem;
+  }
+  .lock-card input:focus { outline: none; border-color: var(--red); }
+  .lock-card .btn { width: 100%; }
+  .msg { min-height: 1.4rem; margin-top: 0.8rem; font-size: 0.92rem; color: var(--red-hover); }
+
+  /* App header */
+  header.top {
+    position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding: 0.75rem 5%; background: rgba(253,246,246,0.96); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+  .brand img { width: 46px; }
+  .brand strong { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--red-dark); display: block; }
+  .brand span { font-size: 0.78rem; color: var(--gray-medium); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 1.75rem 5% 4rem; }
+  .card {
+    background: #fff; border: 1px solid var(--border-light); padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(206,1,0,0.05);
+  }
+  .grid-top { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .grid-mid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  section + section { margin-top: 1.5rem; }
+
+  /* Song of the week hero */
+  .sotw {
+    background: var(--red-dark); color: #fff; padding: 1.75rem; position: relative; overflow: hidden;
+    border-left: 4px solid var(--red); display: flex; flex-direction: column; justify-content: center; min-height: 210px;
+  }
+  .sotw .label { color: var(--red-light); }
+  .sotw h2 { color: #fff; font-size: clamp(1.7rem, 4vw, 2.4rem); margin: 0.6rem 0 0.35rem; }
+  .sotw .who { color: rgba(255,255,255,0.75); font-style: italic; }
+  .sotw .meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .sotw .meta span { border: 1px solid rgba(255,255,255,0.3); padding: 0.2rem 0.7rem; font-size: 0.85rem; }
+  .sotw .empty { color: rgba(255,255,255,0.7); margin-top: 0.6rem; }
+  .sotw::after {
+    content: '♪'; position: absolute; right: 1.2rem; bottom: -1.5rem; font-size: 9rem;
+    color: rgba(255,92,92,0.12); pointer-events: none;
+  }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); margin-top: 1.5rem; }
+  .stat { background: #fff; padding: 1rem; }
+  .stat b { display: block; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--red-dark); line-height: 1.1; }
+  .stat span { font-size: 0.8rem; color: var(--gray-medium); }
+
+  /* Form */
+  form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .field { margin-bottom: 0.85rem; }
+  .field > label, .field > .lbl {
+    display: block; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 0.8rem;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-bottom: 0.35rem;
+  }
+  .field input[type=text], .field input[type=date], .field select, .search {
+    width: 100%; padding: 0.7rem; border: 1px solid var(--border-light); background: #fff; min-height: 44px; font-size: 1rem;
+  }
+  .field input:focus, .field select:focus, .search:focus { outline: none; border-color: var(--red); }
+  .optional { text-transform: none; letter-spacing: 0; color: var(--gray-medium); font-family: 'Lora', serif; font-size: 0.75rem; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border-light); }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label {
+    text-align: center; padding: 0.65rem; cursor: pointer; min-height: 44px; font-size: 0.95rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem; background: #fff;
+  }
+  .seg input:checked + label.g-alabanza { background: var(--red); color: #fff; }
+  .seg input:checked + label.g-adoracion { background: var(--blue); color: #fff; }
+  .seg input:focus-visible + label { outline: 3px solid var(--red); outline-offset: -3px; }
+  .check { display: flex; align-items: center; gap: 0.6rem; margin: 0.25rem 0 1rem; cursor: pointer; font-size: 0.95rem; }
+  .check input { width: 20px; height: 20px; accent-color: var(--red); }
+  form .btn { width: 100%; }
+
+  /* Chips & badges */
+  .badge { display: inline-block; font-size: 0.72rem; padding: 0.12rem 0.55rem; letter-spacing: 0.04em; white-space: nowrap; }
+  .badge.alabanza { background: var(--red-pale); color: #9a0000; }
+  .badge.adoracion { background: var(--blue-pale); color: #174f84; }
+  .key { font-size: 0.75rem; border: 1px solid var(--border-light); padding: 0.05rem 0.45rem; color: var(--gray-dark); white-space: nowrap; }
+
+  /* Weeks */
+  .weeks { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+  .week { background: #fff; border: 1px solid var(--border-light); border-top: 3px solid var(--red); }
+  .week h3 { font-size: 1.05rem; padding: 0.9rem 1rem 0.75rem; }
+  .week h3 small { display: block; margin-top: 0.15rem; font-family: 'Lora', serif; font-weight: 400; font-size: 0.8rem; color: var(--gray-medium); }
+  .week ul { list-style: none; }
+  .week li { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.5rem 0.55rem 1rem; border-top: 1px solid #f1e7d8; }
+  .week li.sotw-row { background: #FFF9EC; }
+  .song-main { flex: 1; min-width: 0; }
+  .song-main strong { display: block; color: var(--ink); font-weight: 500; overflow-wrap: anywhere; }
+  .song-main small { color: var(--gray-medium); font-size: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-top: 0.15rem; }
+  .icon-btn {
+    background: none; border: 0; cursor: pointer; min-width: 40px; min-height: 40px; font-size: 1.15rem;
+    color: #c9bfb1; display: grid; place-items: center; flex-shrink: 0;
+  }
+  .icon-btn:hover { color: var(--red); }
+  .icon-btn.on { color: #D99A1E; }
+  .del.confirm { color: #fff; background: var(--red); font-size: 0.78rem; min-width: 64px; padding: 0 0.4rem; }
+  .more { text-align: center; margin-top: 1rem; }
+  .empty-note { color: var(--gray-medium); font-style: italic; padding: 1rem 0; }
+
+  /* Chart */
+  .chart-wrap { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: center; position: relative; }
+  .chart-wrap svg { width: 100%; height: auto; overflow: visible; }
+  .chart-wrap path { stroke: #fff; stroke-width: 2; cursor: pointer; transition: opacity 0.15s; }
+  .chart-wrap.dim path:not(.hot) { opacity: 0.35; }
+  .donut-center text { fill: var(--gray-medium); font-size: 12px; }
+  .legend { list-style: none; }
+  .legend li { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; border-bottom: 1px solid #f1e7d8; font-size: 0.92rem; cursor: default; }
+  .legend .sw { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .legend .nm { flex: 1; color: var(--ink); overflow-wrap: anywhere; }
+  .legend .ct { color: var(--gray-medium); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tip {
+    position: absolute; pointer-events: none; background: var(--red-dark); color: #fff; padding: 0.45rem 0.7rem;
+    font-size: 0.85rem; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); z-index: 5;
+  }
+
+  /* Genre split bar */
+  .split { display: flex; height: 10px; gap: 2px; margin: 1.25rem 0 0.5rem; }
+  .split div { border-radius: 2px; }
+  .split-legend { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--gray-medium); }
+
+  /* Repertoire */
+  .rep-tools { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+  .rep-tools .search { flex: 1 1 220px; width: auto; }
+  .rep-tools select { flex: 0 0 auto; width: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th { text-align: left; font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.75rem; color: var(--red); padding: 0.6rem 0.5rem; border-bottom: 2px solid var(--border-light); }
+  td { padding: 0.65rem 0.5rem; border-bottom: 1px solid #f1e7d8; vertical-align: top; }
+  td.num { font-variant-numeric: tabular-nums; text-align: center; }
+  td small { display: block; color: var(--gray-medium); font-size: 0.8rem; }
+  .ago { color: var(--gray-medium); font-size: 0.8rem; display: block; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%); background: var(--red-dark); color: #fff;
+    padding: 0.7rem 1.1rem; font-size: 0.92rem; z-index: 50; box-shadow: 0 8px 24px rgba(0,0,0,0.25); max-width: 90vw;
+  }
+
+  @media (max-width: 900px) {
+    .grid-top, .grid-mid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    main { padding-top: 1.1rem; }
+    .card { padding: 1.15rem; }
+    .chart-wrap { grid-template-columns: 1fr; }
+    .chart-wrap svg { max-width: 220px; margin: 0 auto; display: block; }
+    .weeks { grid-template-columns: 1fr; }
+    .brand span { display: none; }
+    .stat b { font-size: 1.45rem; }
+    /* repertoire becomes stacked rows */
+    table thead { display: none; }
+    table, tbody, tr, td { display: block; width: 100%; }
+    tr { border-bottom: 1px solid #f1e7d8; padding: 0.7rem 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem; }
+    td { border: 0; padding: 0; width: auto; }
+    td.c-song { flex: 1 1 calc(100% - 7.5rem); order: 1; }
+    td.c-last { flex: 0 0 7rem; order: 2; text-align: right; align-self: start; font-size: 0.85rem; }
+    td.c-genre { order: 3; }
+    td.c-count { order: 4; font-size: 0.85rem; }
+    td.c-key { order: 5; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lock">
+  <form class="lock-card" id="lockForm" autocomplete="off">
+    <img src="/img/churchlogo-removebg-preview.png" alt="Logo de IDDPMI Soledad" />
+    <div class="label">Solo para el equipo</div>
+    <h1>Equipo de Alabanza</h1>
+    <p>Escribe la clave del equipo para ver y registrar las canciones.</p>
+    <label for="pass" class="label" style="display:block;margin-bottom:.4rem">Clave</label>
+    <input type="password" id="pass" autocomplete="current-password" required />
+    <button class="btn" type="submit" id="lockBtn">Entrar</button>
+    <div class="msg" id="lockMsg" role="alert"></div>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="top">
+    <a class="brand" href="/">
+      <img src="/img/churchlogo-removebg-preview.png" alt="" />
+      <div><strong>Equipo de Alabanza</strong><span>Iglesia de Dios Pentecostal M.I. Soledad</span></div>
+    </a>
+    <button type="button" class="btn-ghost" id="logout">Salir</button>
+  </header>
+
+  <main>
+    <div class="grid-top">
+      <div>
+        <div class="sotw" id="sotw" aria-live="polite"></div>
+        <div class="stats">
+          <div class="stat"><b id="stRep">0</b><span>Canciones en el repertorio</span></div>
+          <div class="stat"><b id="stSung">0</b><span>Veces cantadas</span></div>
+          <div class="stat"><b id="stWeeks">0</b><span>Semanas registradas</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="label">Registrar</div>
+        <h2>Agregar <em>canción</em></h2>
+        <form id="addForm" autocomplete="off">
+          <div class="row">
+            <div class="field">
+              <label for="fDate">Fecha</label>
+              <input type="date" id="fDate" required />
+            </div>
+            <div class="field">
+              <label for="fKey">Tono <span class="optional">(opcional)</span></label>
+              <input type="text" id="fKey" list="keyList" maxlength="12" placeholder="Ej. G, Am" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="fSong">Canción</label>
+            <input type="text" id="fSong" list="songList" maxlength="120" required placeholder="Nombre de la canción" />
+          </div>
+          <div class="field">
+            <label for="fArtist">Artista <span class="optional">(opcional)</span></label>
+            <input type="text" id="fArtist" list="artistList" maxlength="120" placeholder="Ej. Marcos Witt" />
+          </div>
+          <div class="field">
+            <span class="lbl" id="genreLbl">Género</span>
+            <div class="seg" role="radiogroup" aria-labelledby="genreLbl">
+              <input type="radio" name="genre" id="gAl" value="alabanza" checked />
+              <label for="gAl" class="g-alabanza">Alabanza</label>
+              <input type="radio" name="genre" id="gAd" value="adoracion" />
+              <label for="gAd" class="g-adoracion">Adoración</label>
+            </div>
+          </div>
+          <label class="check"><input type="checkbox" id="fStar" /> ★ Canción de la semana</label>
+          <button class="btn" type="submit" id="addBtn">Agregar</button>
+        </form>
+        <datalist id="songList"></datalist>
+        <datalist id="artistList"></datalist>
+        <datalist id="keyList">
+          <option value="C"><option value="C#"><option value="Db"><option value="D"><option value="Eb"><option value="E">
+          <option value="F"><option value="F#"><option value="Gb"><option value="G"><option value="Ab"><option value="A">
+          <option value="Bb"><option value="B"><option value="Cm"><option value="C#m"><option value="Dm"><option value="Ebm">
+          <option value="Em"><option value="Fm"><option value="F#m"><option value="Gm"><option value="G#m"><option value="Am">
+          <option value="Bbm"><option value="Bm">
+        </datalist>
+      </div>
+    </div>
+
+    <section>
+      <div class="label">Por semana</div>
+      <h2>Canciones <em>cantadas</em></h2>
+      <div class="weeks" id="weeks"></div>
+      <div class="more"><button type="button" class="btn-ghost" id="moreWeeks" hidden>Ver semanas anteriores</button></div>
+    </section>
+
+    <div class="grid-mid" style="margin-top:1.5rem">
+      <div class="card">
+        <div class="label">Estadísticas</div>
+        <h2>Las más <em>cantadas</em></h2>
+        <div class="chart-wrap" id="chart"></div>
+      </div>
+      <div class="card">
+        <div class="label">Balance</div>
+        <h2>Alabanza y <em>adoración</em></h2>
+        <p style="font-size:.92rem;color:var(--gray-medium)">Veces que se ha cantado cada género, en total.</p>
+        <div class="split" id="split"></div>
+        <div class="split-legend" id="splitLegend"></div>
+        <div style="margin-top:1.5rem">
+          <div class="label" style="margin-bottom:.5rem">Hace tiempo que no se cantan</div>
+          <ul class="legend" id="stale"></ul>
+        </div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="label">Repertorio</div>
+      <h2>Todas las <em>canciones</em></h2>
+      <div class="rep-tools">
+        <input type="search" class="search" id="q" placeholder="Buscar canción o artista" aria-label="Buscar canción o artista" />
+        <select class="search" id="fGenre" aria-label="Filtrar por género">
+          <option value="">Todos los géneros</option>
+          <option value="alabanza">Alabanza</option>
+          <option value="adoracion">Adoración</option>
+        </select>
+        <select class="search" id="sort" aria-label="Ordenar">
+          <option value="last">Cantada más recientemente</option>
+          <option value="oldest">Hace más tiempo</option>
+          <option value="count">Más cantadas</option>
+          <option value="az">A–Z</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr><th>Canción</th><th>Género</th><th style="text-align:center">Veces</th><th>Tono</th><th>Última vez</th></tr></thead>
+        <tbody id="rep"></tbody>
+      </table>
+      <p class="empty-note" id="repEmpty" hidden>No hay canciones que coincidan.</p>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  const API = '/api/songs';
+  const GENRE_NAME = { alabanza: 'Alabanza', adoracion: 'Adoración' };
+  const SERIES = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)'];
+  const $ = id => document.getElementById(id);
+
+  let passcode = '';
+  let entries = [];
+  let weeksShown = 3;
+  let pendingDelete = null;
+
+  // ---------- storage helpers (may be unavailable) ----------
+  const saved = {
+    get() { try { return localStorage.getItem('alabanzaPass') || ''; } catch { return ''; } },
+    set(v) { try { localStorage.setItem('alabanzaPass', v); } catch {} },
+    clear() { try { localStorage.removeItem('alabanzaPass'); } catch {} },
+  };
+
+  // ---------- utils ----------
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9ñ ]/g, '').replace(/\s+/g, ' ').trim();
+  const toDate = d => new Date(d + 'T12:00:00Z');
+  const fmtLong = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const fmtDayMonth = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+  const fmtWeekday = d => toDate(d).toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
+  const fmtShort = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const todayStr = () => { const n = new Date(); return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+  const weekOf = d => { const x = toDate(d); x.setUTCDate(x.getUTCDate() - x.getUTCDay()); return x.toISOString().slice(0, 10); };
+  function ago(d) {
+    const days = Math.round((toDate(todayStr()) - toDate(d)) / 86400000);
+    if (days <= 0) return 'hoy';
+    if (days === 1) return 'ayer';
+    if (days < 14) return `hace ${days} días`;
+    if (days < 60) return `hace ${Math.round(days / 7)} semanas`;
+    if (days < 365) return `hace ${Math.round(days / 30)} meses`;
+    const y = Math.round(days / 365); return y === 1 ? 'hace 1 año' : `hace ${y} años`;
+  }
+  function toast(text) {
+    const t = $('toast'); t.textContent = text; t.hidden = false;
+    clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 2600);
+  }
+
+  // ---------- API ----------
+  async function api(method, body, query = '') {
+    const res = await fetch(API + query, {
+      method,
+      headers: { 'x-passcode': passcode, ...(body ? { 'content-type': 'application/json' } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    let data = {};
+    try { data = await res.json(); } catch {}
+    if (!res.ok) { const e = new Error(data.error || 'error'); e.status = res.status; throw e; }
+    return data;
+  }
+  function errorText(e) {
+    if (e.status === 401) return 'Clave incorrecta.';
+    if (e.status === 503) return 'El panel todavía no está configurado (falta la clave en Netlify).';
+    if (e.status === 400) return 'Revisa los datos: falta la canción o la fecha.';
+    return 'No se pudo conectar. Revisa tu internet e intenta de nuevo.';
+  }
+
+  // ---------- lock ----------
+  async function unlock(code, quiet) {
+    passcode = code;
+    $('lockBtn').disabled = true;
+    try {
+      const data = await api('GET');
+      entries = data.entries;
+      saved.set(code);
+      $('lock').hidden = true; $('app').hidden = false;
+      render();
+    } catch (e) {
+      saved.clear();
+      if (!quiet) $('lockMsg').textContent = errorText(e);
+      $('pass').value = ''; $('pass').focus();
+    } finally {
+      $('lockBtn').disabled = false;
+    }
+  }
+  $('lockForm').addEventListener('submit', e => { e.preventDefault(); $('lockMsg').textContent = ''; unlock($('pass').value); });
+  $('logout').addEventListener('click', () => {
+    saved.clear(); passcode = ''; entries = [];
+    $('app').hidden = true; $('lock').hidden = false; $('pass').focus();
+  });
+
+  // ---------- derived data ----------
+  function repertoire() {
+    const map = new Map();
+    for (const e of entries) {
+      const k = norm(e.song);
+      let r = map.get(k);
+      if (!r) map.set(k, r = { song: e.song, artist: e.artist, genre: e.genre, key: e.key, count: 0, last: e.date, lastCreated: '' });
+      r.count++;
+      const newer = e.date > r.last || (e.date === r.last && (e.createdAt || '') > r.lastCreated);
+      if (newer || r.count === 1) {
+        r.last = e.date; r.lastCreated = e.createdAt || '';
+        r.song = e.song; r.genre = e.genre;
+        if (e.artist) r.artist = e.artist;
+        if (e.key) r.key = e.key;
+      } else {
+        if (!r.artist && e.artist) r.artist = e.artist;
+        if (!r.key && e.key) r.key = e.key;
+      }
+    }
+    return [...map.values()];
+  }
+  function weeks() {
+    const map = new Map();
+    for (const e of entries) {
+      const w = weekOf(e.date);
+      if (!map.has(w)) map.set(w, []);
+      map.get(w).push(e);
+    }
+    return [...map.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([w, list]) => [w,
+      list.sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''))]);
+  }
+
+  // ---------- render ----------
+  function render() {
+    const rep = repertoire();
+    const wk = weeks();
+    $('stRep').textContent = rep.length;
+    $('stSung').textContent = entries.length;
+    $('stWeeks').textContent = wk.length;
+    renderSotw(wk);
+    renderWeeks(wk);
+    renderChart(rep);
+    renderSplit();
+    renderStale(rep);
+    renderRep(rep);
+    $('songList').innerHTML = rep.map(r => `<option value="${esc(r.song)}">`).join('');
+    const artists = [...new Set(rep.map(r => r.artist).filter(Boolean))];
+    $('artistList').innerHTML = artists.map(a => `<option value="${esc(a)}">`).join('');
+  }
+
+  function renderSotw(wk) {
+    let found = null;
+    for (const [w, list] of wk) { const s = list.find(e => e.songOfWeek); if (s) { found = { w, s }; break; } }
+    const box = $('sotw');
+    if (!found) {
+      box.innerHTML = `<div class="label">Canción de la semana</div><h2>Sin elegir todavía</h2>
+        <p class="empty">Marca una canción con la estrella ★ para que aparezca aquí.</p>`;
+      return;
+    }
+    const { w, s } = found;
+    const isCurrent = w === weekOf(todayStr());
+    box.innerHTML = `<div class="label">Canción de la semana · ${isCurrent ? 'esta semana' : 'semana del ' + esc(fmtLong(w))}</div>
+      <h2>${esc(s.song)}</h2>
+      ${s.artist ? `<div class="who">${esc(s.artist)}</div>` : ''}
+      <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(s.date))}</span></div>`;
+  }
+
+  function renderWeeks(wk) {
+    const box = $('weeks');
+    if (!wk.length) {
+      box.innerHTML = `<p class="empty-note">Todavía no hay canciones. Agrega las del domingo con el formulario de arriba.</p>`;
+      $('moreWeeks').hidden = true;
+      return;
+    }
+    box.innerHTML = wk.slice(0, weeksShown).map(([w, list]) => `
+      <div class="week">
+        <h3>Semana del ${esc(fmtDayMonth(w))} <small>${toDate(w).getUTCFullYear()} · ${list.length} ${list.length === 1 ? 'canción' : 'canciones'}</small></h3>
+        <ul>${list.map(e => `
+          <li class="${e.songOfWeek ? 'sotw-row' : ''}">
+            <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-id="${esc(e.id)}"
+              aria-pressed="${e.songOfWeek}" aria-label="${e.songOfWeek ? 'Quitar como canción de la semana' : 'Marcar como canción de la semana'}: ${esc(e.song)}">★</button>
+            <div class="song-main">
+              <strong>${esc(e.song)}</strong>
+              <small>${e.artist ? esc(e.artist) + ' ·' : ''} <span class="badge ${e.genre}">${GENRE_NAME[e.genre]}</span>
+                ${e.key ? `<span class="key">${esc(e.key)}</span>` : ''} ${e.date !== w ? esc(fmtWeekday(e.date)) : ''}</small>
+            </div>
+            <button type="button" class="icon-btn del ${pendingDelete === e.id ? 'confirm' : ''}" data-id="${esc(e.id)}"
+              aria-label="${pendingDelete === e.id ? 'Confirmar borrar' : 'Borrar'}: ${esc(e.song)}">${pendingDelete === e.id ? '¿Borrar?' : '✕'}</button>
+          </li>`).join('')}
+        </ul>
+      </div>`).join('');
+    $('moreWeeks').hidden = wk.length <= weeksShown;
+  }
+
+  function renderChart(rep) {
+    const box = $('chart');
+    if (!rep.length) { box.innerHTML = `<p class="empty-note">El gráfico aparecerá cuando agregues canciones.</p>`; return; }
+    const sorted = [...rep].sort((a, b) => b.count - a.count || b.last.localeCompare(a.last));
+    const top = sorted.slice(0, 4);
+    const restCount = sorted.slice(4).reduce((s, r) => s + r.count, 0);
+    const slices = top.map((r, i) => ({ name: r.song, count: r.count, color: SERIES[i] }));
+    if (restCount) slices.push({ name: `Otras (${sorted.length - 4})`, count: restCount, color: 'var(--series-other)' });
+    const total = entries.length;
+    const R = 100, r0 = 62, cx = 110, cy = 110;
+    let a0 = -Math.PI / 2;
+    const pt = (rad, a) => [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
+    const paths = slices.map((s, i) => {
+      const frac = s.count / total;
+      let d;
+      if (frac >= 0.9999) {
+        d = `M${cx} ${cy - R}A${R} ${R} 0 1 1 ${cx - 0.01} ${cy - R}ZM${cx} ${cy - r0}A${r0} ${r0} 0 1 0 ${cx + 0.01} ${cy - r0}Z`;
+      } else {
+        const a1 = a0 + frac * 2 * Math.PI, big = frac > 0.5 ? 1 : 0;
+        const [x0, y0] = pt(R, a0), [x1, y1] = pt(R, a1), [x2, y2] = pt(r0, a1), [x3, y3] = pt(r0, a0);
+        d = `M${x0} ${y0}A${R} ${R} 0 ${big} 1 ${x1} ${y1}L${x2} ${y2}A${r0} ${r0} 0 ${big} 0 ${x3} ${y3}Z`;
+        a0 = a1;
+      }
+      return `<path d="${d}" fill="${s.color}" fill-rule="evenodd" data-i="${i}" tabindex="0"
+        aria-label="${esc(s.name)}: ${s.count} ${s.count === 1 ? 'vez' : 'veces'}"></path>`;
+    }).join('');
+    box.innerHTML = `
+      <svg viewBox="0 0 220 220" role="img" aria-label="Gráfico de las canciones más cantadas">
+        ${paths}
+        <g class="donut-center" text-anchor="middle">
+          <text x="110" y="112" style="font-family:'Playfair Display',serif;font-size:30px;fill:var(--red-dark)">${total}</text>
+          <text x="110" y="132">veces cantadas</text>
+        </g>
+      </svg>
+      <ul class="legend">${slices.map((s, i) => `
+        <li data-i="${i}"><span class="sw" style="background:${s.color}"></span><span class="nm">${esc(s.name)}</span>
+        <span class="ct">${s.count} · ${Math.round(s.count / total * 100)}%</span></li>`).join('')}
+      </ul>
+      <div class="tip" hidden></div>`;
+    const tip = box.querySelector('.tip');
+    const hot = (i, ev) => {
+      box.classList.toggle('dim', i != null);
+      box.querySelectorAll('path').forEach(p => p.classList.toggle('hot', p.dataset.i == i));
+      if (i == null || !ev) { tip.hidden = true; return; }
+      const s = slices[i], rect = box.getBoundingClientRect();
+      tip.innerHTML = `<b>${esc(s.name)}</b> · ${s.count} ${s.count === 1 ? 'vez' : 'veces'} (${Math.round(s.count / total * 100)}%)`;
+      const src = ev.touches ? ev.touches[0] : ev;
+      let x = src.clientX - rect.left, y = src.clientY - rect.top;
+      if (ev.type === 'focus') { const b = ev.target.getBoundingClientRect(); x = b.left + b.width / 2 - rect.left; y = b.top - rect.top; }
+      tip.style.left = Math.max(80, Math.min(rect.width - 80, x)) + 'px';
+      tip.style.top = y + 'px';
+      tip.hidden = false;
+    };
+    box.querySelectorAll('path').forEach(p => {
+      p.addEventListener('pointermove', ev => hot(p.dataset.i, ev));
+      p.addEventListener('pointerleave', () => hot(null));
+      p.addEventListener('focus', ev => hot(p.dataset.i, ev));
+      p.addEventListener('blur', () => hot(null));
+    });
+    box.querySelectorAll('.legend li').forEach(li => {
+      li.addEventListener('pointerenter', () => hot(li.dataset.i));
+      li.addEventListener('pointerleave', () => hot(null));
+    });
+  }
+
+  function renderSplit() {
+    const al = entries.filter(e => e.genre === 'alabanza').length;
+    const ad = entries.length - al;
+    const tot = entries.length || 1;
+    $('split').innerHTML = entries.length
+      ? `${al ? `<div style="flex:${al};background:var(--series-1)"></div>` : ''}${ad ? `<div style="flex:${ad};background:var(--series-2)"></div>` : ''}`
+      : `<div style="flex:1;background:#eee"></div>`;
+    $('splitLegend').innerHTML = `
+      <span><span class="badge alabanza">Alabanza</span> ${al} (${Math.round(al / tot * 100)}%)</span>
+      <span>${ad} (${Math.round(ad / tot * 100)}%) <span class="badge adoracion">Adoración</span></span>`;
+  }
+
+  function renderStale(rep) {
+    const list = [...rep].sort((a, b) => a.last.localeCompare(b.last)).slice(0, 4);
+    $('stale').innerHTML = list.length && rep.length > 4
+      ? list.map(r => `<li><span class="nm">${esc(r.song)}</span><span class="ct">${esc(ago(r.last))}</span></li>`).join('')
+      : `<li><span class="nm" style="color:var(--gray-medium);font-style:italic">Aparecerán cuando el repertorio crezca.</span></li>`;
+  }
+
+  function renderRep(rep) {
+    const q = norm($('q').value || '');
+    const g = $('fGenre').value;
+    const sort = $('sort').value;
+    let rows = rep.filter(r => (!g || r.genre === g) && (!q || norm(r.song + ' ' + (r.artist || '')).includes(q)));
+    const cmp = {
+      last: (a, b) => b.last.localeCompare(a.last),
+      oldest: (a, b) => a.last.localeCompare(b.last),
+      count: (a, b) => b.count - a.count || b.last.localeCompare(a.last),
+      az: (a, b) => a.song.localeCompare(b.song, 'es'),
+    }[sort];
+    rows.sort(cmp);
+    $('rep').innerHTML = rows.map(r => `
+      <tr>
+        <td class="c-song"><strong style="color:var(--ink);font-weight:500">${esc(r.song)}</strong>${r.artist ? `<small>${esc(r.artist)}</small>` : ''}</td>
+        <td class="c-genre"><span class="badge ${r.genre}">${GENRE_NAME[r.genre]}</span></td>
+        <td class="c-count num">${r.count}×</td>
+        <td class="c-key">${r.key ? `<span class="key">${esc(r.key)}</span>` : '<span style="color:#bbb">—</span>'}</td>
+        <td class="c-last">${esc(fmtShort(r.last))}<span class="ago">${esc(ago(r.last))}</span></td>
+      </tr>`).join('');
+    $('repEmpty').hidden = rows.length > 0 || !rep.length;
+    if (!rep.length) $('rep').innerHTML = `<tr><td colspan="5" class="empty-note">El repertorio se llenará solo conforme agregues canciones.</td></tr>`;
+  }
+
+  // ---------- form ----------
+  $('fDate').value = todayStr();
+  $('fSong').addEventListener('change', () => {
+    const r = repertoire().find(x => norm(x.song) === norm($('fSong').value));
+    if (!r) return;
+    if (!$('fArtist').value && r.artist) $('fArtist').value = r.artist;
+    if (!$('fKey').value && r.key) $('fKey').value = r.key;
+    (r.genre === 'adoracion' ? $('gAd') : $('gAl')).checked = true;
+  });
+  $('addForm').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const btn = $('addBtn'); btn.disabled = true;
+    const body = {
+      date: $('fDate').value,
+      song: $('fSong').value,
+      artist: $('fArtist').value,
+      key: $('fKey').value,
+      genre: document.querySelector('input[name=genre]:checked').value,
+      songOfWeek: $('fStar').checked,
+    };
+    try {
+      const { entry } = await api('POST', body);
+      if (entry.songOfWeek) {
+        const w = weekOf(entry.date);
+        entries.forEach(e => { if (weekOf(e.date) === w) e.songOfWeek = false; });
+      }
+      entries.push(entry);
+      render();
+      toast(`“${entry.song}” agregada.`);
+      $('fSong').value = ''; $('fArtist').value = ''; $('fKey').value = ''; $('fStar').checked = false;
+      $('fSong').focus();
+    } catch (e) {
+      toast(errorText(e));
+      if (e.status === 401) $('logout').click();
+    } finally { btn.disabled = false; }
+  });
+
+  // ---------- week actions (star / delete) ----------
+  $('weeks').addEventListener('click', async ev => {
+    const btn = ev.target.closest('button'); if (!btn) return;
+    const id = btn.dataset.id;
+    const entry = entries.find(e => e.id === id); if (!entry) return;
+
+    if (btn.classList.contains('star')) {
+      const value = !entry.songOfWeek;
+      try {
+        await api('PATCH', { id, songOfWeek: value });
+        const w = weekOf(entry.date);
+        if (value) entries.forEach(e => { if (weekOf(e.date) === w) e.songOfWeek = false; });
+        entry.songOfWeek = value;
+        render();
+      } catch (e) { toast(errorText(e)); }
+      return;
+    }
+
+    if (btn.classList.contains('del')) {
+      if (pendingDelete !== id) {
+        pendingDelete = id; render();
+        setTimeout(() => { if (pendingDelete === id) { pendingDelete = null; render(); } }, 4000);
+        document.querySelector(`.del[data-id="${CSS.escape(id)}"]`)?.focus();
+        return;
+      }
+      pendingDelete = null;
+      try {
+        await api('DELETE', null, '?id=' + encodeURIComponent(id));
+        entries = entries.filter(e => e.id !== id);
+        render();
+        toast(`“${entry.song}” borrada.`);
+      } catch (e) { toast(errorText(e)); render(); }
+    }
+  });
+  $('moreWeeks').addEventListener('click', () => { weeksShown += 6; render(); });
+  ['q', 'fGenre', 'sort'].forEach(id => $(id).addEventListener('input', () => renderRep(repertoire())));
+
+  // ---------- start ----------
+  const remembered = saved.get();
+  if (remembered) unlock(remembered, true); else $('pass').focus();
+})();
+</script>
+</body>
+</html>
