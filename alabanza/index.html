@@ -118,10 +118,6 @@
   }
 
   /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); margin-top: 1.5rem; }
-  .stat { background: #fff; padding: 1rem; }
-  .stat b { display: block; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--red-dark); line-height: 1.1; }
-  .stat span { font-size: 0.8rem; color: var(--gray-medium); }
 
   /* Form */
   form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
@@ -172,7 +168,6 @@
   .icon-btn:hover { color: var(--red); }
   .icon-btn.on { color: #D99A1E; }
   .del.confirm { color: #fff; background: var(--red); font-size: 0.78rem; min-width: 64px; padding: 0 0.4rem; }
-  .more { text-align: center; margin-top: 1rem; }
   .empty-note { color: var(--gray-medium); font-style: italic; padding: 1rem 0; }
 
   /* Chart */
@@ -212,6 +207,58 @@
     padding: 0.7rem 1.1rem; font-size: 0.92rem; z-index: 50; box-shadow: 0 8px 24px rgba(0,0,0,0.25); max-width: 90vw;
   }
 
+
+  /* Single stat */
+  .stat-one { display: flex; align-items: baseline; gap: 0.75rem; background: #fff; border: 1px solid var(--border-light); border-top: 0; padding: 0.9rem 1.25rem; }
+  .stat-one b { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--red-dark); line-height: 1; }
+  .stat-one span { font-size: 0.92rem; color: var(--gray-medium); }
+
+  /* Duplicate notice */
+  .dup { background: #FFF9EC; border: 1px solid #ecd6a4; border-left: 3px solid #D99A1E; padding: 0.85rem 1rem; margin-bottom: 0.9rem; font-size: 0.92rem; }
+  .dup p { margin-bottom: 0.4rem; color: var(--ink); }
+  .dup small { color: var(--gray-medium); display: block; margin-bottom: 0.6rem; }
+  .linkish { background: none; border: 0; color: var(--red); text-decoration: underline; cursor: pointer; font-size: 0.9rem; padding: 0.3rem 0; }
+
+    .week-note { color: var(--gray-medium); font-size: 0.85rem; margin-top: 0.9rem; font-style: italic; }
+  .icon-btn.edit { font-size: 1.05rem; color: #9b9184; }
+  .row-actions { display: flex; gap: 0.15rem; justify-content: flex-end; }
+  .icon-btn.add { font-size: 1.3rem; color: var(--red); }
+  .icon-btn.add.done { color: #2E8F6E; font-size: 1rem; cursor: default; }
+  td.c-act { white-space: nowrap; }
+
+  .pager { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+  .pager span { font-size: 0.88rem; color: var(--gray-medium); text-align: center; flex: 1; }
+  .pager .btn-ghost:disabled { opacity: 0.4; cursor: default; border-color: var(--border-light); color: var(--gray-dark); }
+
+  /* Cleaner week cards */
+  .week h3 { display: flex; justify-content: space-between; align-items: baseline; padding: 0.85rem 1rem 0.7rem; }
+  .week h3 small { display: inline; margin: 0; }
+  .week li { padding: 0.5rem 0.4rem 0.5rem 0.5rem; gap: 0.45rem; }
+  .week li.none { color: var(--gray-medium); font-style: italic; font-size: 0.9rem; padding: 0.9rem 1rem; }
+  .week .song-main small { display: block; margin-top: 0.1rem; }
+  .gdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .gdot.alabanza { background: var(--series-1); }
+  .gdot.adoracion { background: var(--series-2); }
+  .week-note .gdot { margin-right: 0.15rem; }
+  .row-tools { display: flex; }
+  .week .icon-btn.edit, .week .icon-btn.del:not(.confirm) { min-width: 34px; font-size: 0.95rem; }
+  @media (hover: hover) and (pointer: fine) {
+    .week .row-tools { opacity: 0; transition: opacity 0.15s; }
+    .week li:hover .row-tools, .week li:focus-within .row-tools { opacity: 1; }
+  }
+
+  /* Edit dialog */
+  dialog { border: 0; padding: 0; width: min(460px, calc(100vw - 2rem)); margin: auto; background: transparent; }
+  dialog::backdrop { background: rgba(26,0,0,0.55); }
+  .dlg { background: var(--cream); border-top: 4px solid var(--red); padding: 1.5rem; }
+  .dlg h2 { margin-bottom: 1rem; }
+  .dlg .actions { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+  .dlg .actions .btn { flex: 1; }
+  .dlg .danger { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-light); font-size: 0.85rem; color: var(--gray-medium); }
+  .btn-danger { background: transparent; border: 1px solid var(--red); color: var(--red); padding: 0.5rem 0.9rem; min-height: 40px; cursor: pointer; margin-top: 0.5rem; }
+  .btn-danger.confirm { background: var(--red); color: #fff; }
+  .dlg .msg { margin-top: 0.4rem; }
+
   @media (max-width: 900px) {
     .grid-top, .grid-mid { grid-template-columns: 1fr; }
   }
@@ -222,7 +269,6 @@
     .chart-wrap svg { max-width: 220px; margin: 0 auto; display: block; }
     .weeks { grid-template-columns: 1fr; }
     .brand span { display: none; }
-    .stat b { font-size: 1.45rem; }
     /* repertoire becomes stacked rows */
     table thead { display: none; }
     table, tbody, tr, td { display: block; width: 100%; }
@@ -233,6 +279,7 @@
     td.c-genre { order: 3; }
     td.c-count { order: 4; font-size: 0.85rem; }
     td.c-key { order: 5; }
+    td.c-act { order: 6; margin-left: auto; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -267,11 +314,7 @@
     <div class="grid-top">
       <div>
         <div class="sotw" id="sotw" aria-live="polite"></div>
-        <div class="stats">
-          <div class="stat"><b id="stRep">0</b><span>Canciones en el repertorio</span></div>
-          <div class="stat"><b id="stSung">0</b><span>Veces cantadas</span></div>
-          <div class="stat"><b id="stWeeks">0</b><span>Semanas registradas</span></div>
-        </div>
+        <div class="stat-one"><b id="stRep">0</b><span>canciones en el repertorio</span></div>
       </div>
 
       <div class="card">
@@ -292,6 +335,12 @@
             <label for="fSong">Canción</label>
             <input type="text" id="fSong" list="songList" maxlength="120" required placeholder="Nombre de la canción" />
           </div>
+          <div class="dup" id="dup" hidden>
+            <p><strong id="dupName"></strong> ya está en el repertorio.</p>
+            <small>No se duplica: se agrega la misma canción a la semana, con su artista, género y tono.</small>
+            <button type="button" class="linkish" id="dupShow">Ver en el repertorio</button>
+          </div>
+          <div id="newFields">
           <div class="field">
             <label for="fArtist">Artista <span class="optional">(opcional)</span></label>
             <input type="text" id="fArtist" list="artistList" maxlength="120" placeholder="Ej. Marcos Witt" />
@@ -304,6 +353,7 @@
               <input type="radio" name="genre" id="gAd" value="adoracion" />
               <label for="gAd" class="g-adoracion">Adoración</label>
             </div>
+          </div>
           </div>
           <label class="check"><input type="checkbox" id="fStar" /> ★ Canción de la semana</label>
           <button class="btn" type="submit" id="addBtn">Agregar</button>
@@ -321,10 +371,10 @@
     </div>
 
     <section>
-      <div class="label">Por semana</div>
+      <div class="label">Últimas 3 semanas</div>
       <h2>Canciones <em>cantadas</em></h2>
       <div class="weeks" id="weeks"></div>
-      <div class="more"><button type="button" class="btn-ghost" id="moreWeeks" hidden>Ver semanas anteriores</button></div>
+      <p class="week-note"><span class="gdot alabanza"></span> Alabanza &nbsp; <span class="gdot adoracion"></span> Adoración</p>
     </section>
 
     <div class="grid-mid" style="margin-top:1.5rem">
@@ -364,382 +414,63 @@
         </select>
       </div>
       <table>
-        <thead><tr><th>Canción</th><th>Género</th><th style="text-align:center">Veces</th><th>Tono</th><th>Última vez</th></tr></thead>
+        <thead><tr><th>Canción</th><th>Género</th><th style="text-align:center">Veces</th><th>Tono</th><th>Última vez</th><th style="text-align:right">Esta semana</th></tr></thead>
         <tbody id="rep"></tbody>
       </table>
       <p class="empty-note" id="repEmpty" hidden>No hay canciones que coincidan.</p>
+      <nav class="pager" id="pager" aria-label="Páginas del repertorio" hidden>
+        <button type="button" class="btn-ghost" id="prevPage">‹ Anterior</button>
+        <span id="pageInfo" aria-live="polite"></span>
+        <button type="button" class="btn-ghost" id="nextPage">Siguiente ›</button>
+      </nav>
     </section>
   </main>
 </div>
 
+<dialog id="editDlg" aria-labelledby="editTitle">
+  <form class="dlg" id="editForm" autocomplete="off">
+    <div class="label">Editar</div>
+    <h2 id="editTitle">Datos de la <em>canción</em></h2>
+    <p style="font-size:.85rem;color:var(--gray-medium);margin:-.5rem 0 1rem">Los cambios se ven en todas las semanas y en el repertorio.</p>
+    <div class="field">
+      <label for="eSong">Canción</label>
+      <input type="text" id="eSong" maxlength="120" required />
+    </div>
+    <div class="field">
+      <label for="eArtist">Artista <span class="optional">(opcional)</span></label>
+      <input type="text" id="eArtist" list="artistList" maxlength="120" />
+    </div>
+    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+      <div class="field">
+        <span class="lbl" id="eGenreLbl">Género</span>
+        <select id="eGenre" aria-labelledby="eGenreLbl" class="search">
+          <option value="alabanza">Alabanza</option>
+          <option value="adoracion">Adoración</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="eKey">Tono <span class="optional">(opcional)</span></label>
+        <input type="text" id="eKey" list="keyList" maxlength="12" />
+      </div>
+    </div>
+    <div class="field" id="eDateWrap">
+      <label for="eDate">Fecha en que se cantó</label>
+      <input type="date" id="eDate" />
+    </div>
+    <p class="msg" id="editMsg" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="btn-ghost" id="editCancel">Cancelar</button>
+      <button type="submit" class="btn" id="editSave">Guardar</button>
+    </div>
+    <div class="danger">
+      Borrar del repertorio quita la canción y todo su historial.
+      <br><button type="button" class="btn-danger" id="editDelete">Borrar del repertorio</button>
+    </div>
+  </form>
+</dialog>
+
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script>
-(() => {
-  const API = '/api/songs';
-  const GENRE_NAME = { alabanza: 'Alabanza', adoracion: 'Adoración' };
-  const SERIES = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)'];
-  const $ = id => document.getElementById(id);
-
-  let passcode = '';
-  let entries = [];
-  let weeksShown = 3;
-  let pendingDelete = null;
-
-  // ---------- storage helpers (may be unavailable) ----------
-  const saved = {
-    get() { try { return localStorage.getItem('alabanzaPass') || ''; } catch { return ''; } },
-    set(v) { try { localStorage.setItem('alabanzaPass', v); } catch {} },
-    clear() { try { localStorage.removeItem('alabanzaPass'); } catch {} },
-  };
-
-  // ---------- utils ----------
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9ñ ]/g, '').replace(/\s+/g, ' ').trim();
-  const toDate = d => new Date(d + 'T12:00:00Z');
-  const fmtLong = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-  const fmtDayMonth = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
-  const fmtWeekday = d => toDate(d).toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
-  const fmtShort = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-  const todayStr = () => { const n = new Date(); return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
-  const weekOf = d => { const x = toDate(d); x.setUTCDate(x.getUTCDate() - x.getUTCDay()); return x.toISOString().slice(0, 10); };
-  function ago(d) {
-    const days = Math.round((toDate(todayStr()) - toDate(d)) / 86400000);
-    if (days <= 0) return 'hoy';
-    if (days === 1) return 'ayer';
-    if (days < 14) return `hace ${days} días`;
-    if (days < 60) return `hace ${Math.round(days / 7)} semanas`;
-    if (days < 365) return `hace ${Math.round(days / 30)} meses`;
-    const y = Math.round(days / 365); return y === 1 ? 'hace 1 año' : `hace ${y} años`;
-  }
-  function toast(text) {
-    const t = $('toast'); t.textContent = text; t.hidden = false;
-    clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 2600);
-  }
-
-  // ---------- API ----------
-  async function api(method, body, query = '') {
-    const res = await fetch(API + query, {
-      method,
-      headers: { 'x-passcode': passcode, ...(body ? { 'content-type': 'application/json' } : {}) },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    let data = {};
-    try { data = await res.json(); } catch {}
-    if (!res.ok) { const e = new Error(data.error || 'error'); e.status = res.status; throw e; }
-    return data;
-  }
-  function errorText(e) {
-    if (e.status === 401) return 'Clave incorrecta.';
-    if (e.status === 503) return 'El panel todavía no está configurado (falta la clave en Netlify).';
-    if (e.status === 400) return 'Revisa los datos: falta la canción o la fecha.';
-    return 'No se pudo conectar. Revisa tu internet e intenta de nuevo.';
-  }
-
-  // ---------- lock ----------
-  async function unlock(code, quiet) {
-    passcode = code;
-    $('lockBtn').disabled = true;
-    try {
-      const data = await api('GET');
-      entries = data.entries;
-      saved.set(code);
-      $('lock').hidden = true; $('app').hidden = false;
-      render();
-    } catch (e) {
-      saved.clear();
-      if (!quiet) $('lockMsg').textContent = errorText(e);
-      $('pass').value = ''; $('pass').focus();
-    } finally {
-      $('lockBtn').disabled = false;
-    }
-  }
-  $('lockForm').addEventListener('submit', e => { e.preventDefault(); $('lockMsg').textContent = ''; unlock($('pass').value); });
-  $('logout').addEventListener('click', () => {
-    saved.clear(); passcode = ''; entries = [];
-    $('app').hidden = true; $('lock').hidden = false; $('pass').focus();
-  });
-
-  // ---------- derived data ----------
-  function repertoire() {
-    const map = new Map();
-    for (const e of entries) {
-      const k = norm(e.song);
-      let r = map.get(k);
-      if (!r) map.set(k, r = { song: e.song, artist: e.artist, genre: e.genre, key: e.key, count: 0, last: e.date, lastCreated: '' });
-      r.count++;
-      const newer = e.date > r.last || (e.date === r.last && (e.createdAt || '') > r.lastCreated);
-      if (newer || r.count === 1) {
-        r.last = e.date; r.lastCreated = e.createdAt || '';
-        r.song = e.song; r.genre = e.genre;
-        if (e.artist) r.artist = e.artist;
-        if (e.key) r.key = e.key;
-      } else {
-        if (!r.artist && e.artist) r.artist = e.artist;
-        if (!r.key && e.key) r.key = e.key;
-      }
-    }
-    return [...map.values()];
-  }
-  function weeks() {
-    const map = new Map();
-    for (const e of entries) {
-      const w = weekOf(e.date);
-      if (!map.has(w)) map.set(w, []);
-      map.get(w).push(e);
-    }
-    return [...map.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([w, list]) => [w,
-      list.sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''))]);
-  }
-
-  // ---------- render ----------
-  function render() {
-    const rep = repertoire();
-    const wk = weeks();
-    $('stRep').textContent = rep.length;
-    $('stSung').textContent = entries.length;
-    $('stWeeks').textContent = wk.length;
-    renderSotw(wk);
-    renderWeeks(wk);
-    renderChart(rep);
-    renderSplit();
-    renderStale(rep);
-    renderRep(rep);
-    $('songList').innerHTML = rep.map(r => `<option value="${esc(r.song)}">`).join('');
-    const artists = [...new Set(rep.map(r => r.artist).filter(Boolean))];
-    $('artistList').innerHTML = artists.map(a => `<option value="${esc(a)}">`).join('');
-  }
-
-  function renderSotw(wk) {
-    let found = null;
-    for (const [w, list] of wk) { const s = list.find(e => e.songOfWeek); if (s) { found = { w, s }; break; } }
-    const box = $('sotw');
-    if (!found) {
-      box.innerHTML = `<div class="label">Canción de la semana</div><h2>Sin elegir todavía</h2>
-        <p class="empty">Marca una canción con la estrella ★ para que aparezca aquí.</p>`;
-      return;
-    }
-    const { w, s } = found;
-    const isCurrent = w === weekOf(todayStr());
-    box.innerHTML = `<div class="label">Canción de la semana · ${isCurrent ? 'esta semana' : 'semana del ' + esc(fmtLong(w))}</div>
-      <h2>${esc(s.song)}</h2>
-      ${s.artist ? `<div class="who">${esc(s.artist)}</div>` : ''}
-      <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(s.date))}</span></div>`;
-  }
-
-  function renderWeeks(wk) {
-    const box = $('weeks');
-    if (!wk.length) {
-      box.innerHTML = `<p class="empty-note">Todavía no hay canciones. Agrega las del domingo con el formulario de arriba.</p>`;
-      $('moreWeeks').hidden = true;
-      return;
-    }
-    box.innerHTML = wk.slice(0, weeksShown).map(([w, list]) => `
-      <div class="week">
-        <h3>Semana del ${esc(fmtDayMonth(w))} <small>${toDate(w).getUTCFullYear()} · ${list.length} ${list.length === 1 ? 'canción' : 'canciones'}</small></h3>
-        <ul>${list.map(e => `
-          <li class="${e.songOfWeek ? 'sotw-row' : ''}">
-            <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-id="${esc(e.id)}"
-              aria-pressed="${e.songOfWeek}" aria-label="${e.songOfWeek ? 'Quitar como canción de la semana' : 'Marcar como canción de la semana'}: ${esc(e.song)}">★</button>
-            <div class="song-main">
-              <strong>${esc(e.song)}</strong>
-              <small>${e.artist ? esc(e.artist) + ' ·' : ''} <span class="badge ${e.genre}">${GENRE_NAME[e.genre]}</span>
-                ${e.key ? `<span class="key">${esc(e.key)}</span>` : ''} ${e.date !== w ? esc(fmtWeekday(e.date)) : ''}</small>
-            </div>
-            <button type="button" class="icon-btn del ${pendingDelete === e.id ? 'confirm' : ''}" data-id="${esc(e.id)}"
-              aria-label="${pendingDelete === e.id ? 'Confirmar borrar' : 'Borrar'}: ${esc(e.song)}">${pendingDelete === e.id ? '¿Borrar?' : '✕'}</button>
-          </li>`).join('')}
-        </ul>
-      </div>`).join('');
-    $('moreWeeks').hidden = wk.length <= weeksShown;
-  }
-
-  function renderChart(rep) {
-    const box = $('chart');
-    if (!rep.length) { box.innerHTML = `<p class="empty-note">El gráfico aparecerá cuando agregues canciones.</p>`; return; }
-    const sorted = [...rep].sort((a, b) => b.count - a.count || b.last.localeCompare(a.last));
-    const top = sorted.slice(0, 4);
-    const restCount = sorted.slice(4).reduce((s, r) => s + r.count, 0);
-    const slices = top.map((r, i) => ({ name: r.song, count: r.count, color: SERIES[i] }));
-    if (restCount) slices.push({ name: `Otras (${sorted.length - 4})`, count: restCount, color: 'var(--series-other)' });
-    const total = entries.length;
-    const R = 100, r0 = 62, cx = 110, cy = 110;
-    let a0 = -Math.PI / 2;
-    const pt = (rad, a) => [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
-    const paths = slices.map((s, i) => {
-      const frac = s.count / total;
-      let d;
-      if (frac >= 0.9999) {
-        d = `M${cx} ${cy - R}A${R} ${R} 0 1 1 ${cx - 0.01} ${cy - R}ZM${cx} ${cy - r0}A${r0} ${r0} 0 1 0 ${cx + 0.01} ${cy - r0}Z`;
-      } else {
-        const a1 = a0 + frac * 2 * Math.PI, big = frac > 0.5 ? 1 : 0;
-        const [x0, y0] = pt(R, a0), [x1, y1] = pt(R, a1), [x2, y2] = pt(r0, a1), [x3, y3] = pt(r0, a0);
-        d = `M${x0} ${y0}A${R} ${R} 0 ${big} 1 ${x1} ${y1}L${x2} ${y2}A${r0} ${r0} 0 ${big} 0 ${x3} ${y3}Z`;
-        a0 = a1;
-      }
-      return `<path d="${d}" fill="${s.color}" fill-rule="evenodd" data-i="${i}" tabindex="0"
-        aria-label="${esc(s.name)}: ${s.count} ${s.count === 1 ? 'vez' : 'veces'}"></path>`;
-    }).join('');
-    box.innerHTML = `
-      <svg viewBox="0 0 220 220" role="img" aria-label="Gráfico de las canciones más cantadas">
-        ${paths}
-        <g class="donut-center" text-anchor="middle">
-          <text x="110" y="112" style="font-family:'Playfair Display',serif;font-size:30px;fill:var(--red-dark)">${total}</text>
-          <text x="110" y="132">veces cantadas</text>
-        </g>
-      </svg>
-      <ul class="legend">${slices.map((s, i) => `
-        <li data-i="${i}"><span class="sw" style="background:${s.color}"></span><span class="nm">${esc(s.name)}</span>
-        <span class="ct">${s.count} · ${Math.round(s.count / total * 100)}%</span></li>`).join('')}
-      </ul>
-      <div class="tip" hidden></div>`;
-    const tip = box.querySelector('.tip');
-    const hot = (i, ev) => {
-      box.classList.toggle('dim', i != null);
-      box.querySelectorAll('path').forEach(p => p.classList.toggle('hot', p.dataset.i == i));
-      if (i == null || !ev) { tip.hidden = true; return; }
-      const s = slices[i], rect = box.getBoundingClientRect();
-      tip.innerHTML = `<b>${esc(s.name)}</b> · ${s.count} ${s.count === 1 ? 'vez' : 'veces'} (${Math.round(s.count / total * 100)}%)`;
-      const src = ev.touches ? ev.touches[0] : ev;
-      let x = src.clientX - rect.left, y = src.clientY - rect.top;
-      if (ev.type === 'focus') { const b = ev.target.getBoundingClientRect(); x = b.left + b.width / 2 - rect.left; y = b.top - rect.top; }
-      tip.style.left = Math.max(80, Math.min(rect.width - 80, x)) + 'px';
-      tip.style.top = y + 'px';
-      tip.hidden = false;
-    };
-    box.querySelectorAll('path').forEach(p => {
-      p.addEventListener('pointermove', ev => hot(p.dataset.i, ev));
-      p.addEventListener('pointerleave', () => hot(null));
-      p.addEventListener('focus', ev => hot(p.dataset.i, ev));
-      p.addEventListener('blur', () => hot(null));
-    });
-    box.querySelectorAll('.legend li').forEach(li => {
-      li.addEventListener('pointerenter', () => hot(li.dataset.i));
-      li.addEventListener('pointerleave', () => hot(null));
-    });
-  }
-
-  function renderSplit() {
-    const al = entries.filter(e => e.genre === 'alabanza').length;
-    const ad = entries.length - al;
-    const tot = entries.length || 1;
-    $('split').innerHTML = entries.length
-      ? `${al ? `<div style="flex:${al};background:var(--series-1)"></div>` : ''}${ad ? `<div style="flex:${ad};background:var(--series-2)"></div>` : ''}`
-      : `<div style="flex:1;background:#eee"></div>`;
-    $('splitLegend').innerHTML = `
-      <span><span class="badge alabanza">Alabanza</span> ${al} (${Math.round(al / tot * 100)}%)</span>
-      <span>${ad} (${Math.round(ad / tot * 100)}%) <span class="badge adoracion">Adoración</span></span>`;
-  }
-
-  function renderStale(rep) {
-    const list = [...rep].sort((a, b) => a.last.localeCompare(b.last)).slice(0, 4);
-    $('stale').innerHTML = list.length && rep.length > 4
-      ? list.map(r => `<li><span class="nm">${esc(r.song)}</span><span class="ct">${esc(ago(r.last))}</span></li>`).join('')
-      : `<li><span class="nm" style="color:var(--gray-medium);font-style:italic">Aparecerán cuando el repertorio crezca.</span></li>`;
-  }
-
-  function renderRep(rep) {
-    const q = norm($('q').value || '');
-    const g = $('fGenre').value;
-    const sort = $('sort').value;
-    let rows = rep.filter(r => (!g || r.genre === g) && (!q || norm(r.song + ' ' + (r.artist || '')).includes(q)));
-    const cmp = {
-      last: (a, b) => b.last.localeCompare(a.last),
-      oldest: (a, b) => a.last.localeCompare(b.last),
-      count: (a, b) => b.count - a.count || b.last.localeCompare(a.last),
-      az: (a, b) => a.song.localeCompare(b.song, 'es'),
-    }[sort];
-    rows.sort(cmp);
-    $('rep').innerHTML = rows.map(r => `
-      <tr>
-        <td class="c-song"><strong style="color:var(--ink);font-weight:500">${esc(r.song)}</strong>${r.artist ? `<small>${esc(r.artist)}</small>` : ''}</td>
-        <td class="c-genre"><span class="badge ${r.genre}">${GENRE_NAME[r.genre]}</span></td>
-        <td class="c-count num">${r.count}×</td>
-        <td class="c-key">${r.key ? `<span class="key">${esc(r.key)}</span>` : '<span style="color:#bbb">—</span>'}</td>
-        <td class="c-last">${esc(fmtShort(r.last))}<span class="ago">${esc(ago(r.last))}</span></td>
-      </tr>`).join('');
-    $('repEmpty').hidden = rows.length > 0 || !rep.length;
-    if (!rep.length) $('rep').innerHTML = `<tr><td colspan="5" class="empty-note">El repertorio se llenará solo conforme agregues canciones.</td></tr>`;
-  }
-
-  // ---------- form ----------
-  $('fDate').value = todayStr();
-  $('fSong').addEventListener('change', () => {
-    const r = repertoire().find(x => norm(x.song) === norm($('fSong').value));
-    if (!r) return;
-    if (!$('fArtist').value && r.artist) $('fArtist').value = r.artist;
-    if (!$('fKey').value && r.key) $('fKey').value = r.key;
-    (r.genre === 'adoracion' ? $('gAd') : $('gAl')).checked = true;
-  });
-  $('addForm').addEventListener('submit', async ev => {
-    ev.preventDefault();
-    const btn = $('addBtn'); btn.disabled = true;
-    const body = {
-      date: $('fDate').value,
-      song: $('fSong').value,
-      artist: $('fArtist').value,
-      key: $('fKey').value,
-      genre: document.querySelector('input[name=genre]:checked').value,
-      songOfWeek: $('fStar').checked,
-    };
-    try {
-      const { entry } = await api('POST', body);
-      if (entry.songOfWeek) {
-        const w = weekOf(entry.date);
-        entries.forEach(e => { if (weekOf(e.date) === w) e.songOfWeek = false; });
-      }
-      entries.push(entry);
-      render();
-      toast(`“${entry.song}” agregada.`);
-      $('fSong').value = ''; $('fArtist').value = ''; $('fKey').value = ''; $('fStar').checked = false;
-      $('fSong').focus();
-    } catch (e) {
-      toast(errorText(e));
-      if (e.status === 401) $('logout').click();
-    } finally { btn.disabled = false; }
-  });
-
-  // ---------- week actions (star / delete) ----------
-  $('weeks').addEventListener('click', async ev => {
-    const btn = ev.target.closest('button'); if (!btn) return;
-    const id = btn.dataset.id;
-    const entry = entries.find(e => e.id === id); if (!entry) return;
-
-    if (btn.classList.contains('star')) {
-      const value = !entry.songOfWeek;
-      try {
-        await api('PATCH', { id, songOfWeek: value });
-        const w = weekOf(entry.date);
-        if (value) entries.forEach(e => { if (weekOf(e.date) === w) e.songOfWeek = false; });
-        entry.songOfWeek = value;
-        render();
-      } catch (e) { toast(errorText(e)); }
-      return;
-    }
-
-    if (btn.classList.contains('del')) {
-      if (pendingDelete !== id) {
-        pendingDelete = id; render();
-        setTimeout(() => { if (pendingDelete === id) { pendingDelete = null; render(); } }, 4000);
-        document.querySelector(`.del[data-id="${CSS.escape(id)}"]`)?.focus();
-        return;
-      }
-      pendingDelete = null;
-      try {
-        await api('DELETE', null, '?id=' + encodeURIComponent(id));
-        entries = entries.filter(e => e.id !== id);
-        render();
-        toast(`“${entry.song}” borrada.`);
-      } catch (e) { toast(errorText(e)); render(); }
-    }
-  });
-  $('moreWeeks').addEventListener('click', () => { weeksShown += 6; render(); });
-  ['q', 'fGenre', 'sort'].forEach(id => $(id).addEventListener('input', () => renderRep(repertoire())));
-
-  // ---------- start ----------
-  const remembered = saved.get();
-  if (remembered) unlock(remembered, true); else $('pass').focus();
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
