@@ -247,6 +247,27 @@
     .week li:hover .row-tools, .week li:focus-within .row-tools { opacity: 1; }
   }
 
+  /* Song history */
+  .song-link { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; color: var(--ink); font-weight: 500; font-size: inherit; text-decoration: underline; text-decoration-color: var(--border-light); text-underline-offset: 3px; }
+  .song-link:hover { color: var(--red); text-decoration-color: var(--red); }
+  dialog#histDlg { width: min(520px, calc(100vw - 2rem)); }
+  .hist { display: flex; flex-direction: column; max-height: min(80vh, 720px); }
+  .hist-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+  .hist-head h2 { margin: 0.2rem 0 0.2rem; }
+  .hist-sub { font-size: 0.88rem; color: var(--gray-medium); }
+  .hist-pairs { background: #fff; border: 1px solid var(--border-light); padding: 0.7rem 0.9rem; margin: 1rem 0 0; font-size: 0.92rem; }
+  .hist-pairs .label { display: block; font-size: 0.7rem; margin-bottom: 0.3rem; }
+  .muted { color: var(--gray-medium); font-size: 0.85rem; }
+  .hist-body { overflow-y: auto; margin-top: 1rem; display: grid; gap: 0.75rem; }
+  .hweek { background: #fff; border: 1px solid var(--border-light); border-top: 3px solid var(--red); }
+  .hweek-h { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.55rem 0.8rem; font-size: 0.85rem; color: var(--gray-medium); border-bottom: 1px solid #f1e7d8; }
+  .hstar { color: #b07a10; }
+  .hweek ul { list-style: none; }
+  .hweek li { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.8rem; font-size: 0.95rem; }
+  .hweek li .key { margin-left: auto; }
+  .hweek li.me { background: #FFF9EC; }
+  .hweek li.me strong { color: var(--red-dark); font-weight: 600; }
+
   /* Edit dialog */
   dialog { border: 0; padding: 0; width: min(460px, calc(100vw - 2rem)); margin: auto; background: transparent; }
   dialog::backdrop { background: rgba(26,0,0,0.55); }
@@ -467,6 +488,21 @@
       <br><button type="button" class="btn-danger" id="editDelete">Borrar del repertorio</button>
     </div>
   </form>
+</dialog>
+
+<dialog id="histDlg" aria-labelledby="histTitle">
+  <div class="dlg hist">
+    <div class="hist-head">
+      <div>
+        <div class="label">Historial</div>
+        <h2 id="histTitle"></h2>
+        <p class="hist-sub" id="histSub"></p>
+      </div>
+      <button type="button" class="icon-btn" id="histClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="hist-pairs" id="histPairs" hidden></div>
+    <div class="hist-body" id="histBody"></div>
+  </div>
 </dialog>
 
 <div class="toast" id="toast" role="status" hidden></div>

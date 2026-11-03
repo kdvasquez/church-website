@@ -297,7 +297,7 @@
       const tw = r.thisWeekEntry;
       return `
       <tr>
-        <td class="c-song"><strong style="color:var(--ink);font-weight:500">${esc(r.song)}</strong>${r.artist ? `<small>${esc(r.artist)}</small>` : ''}</td>
+        <td class="c-song"><button type="button" class="song-link" data-hist="${esc(r.id)}" title="Ver historial">${esc(r.song)}</button>${r.artist ? `<small>${esc(r.artist)}</small>` : ''}</td>
         <td class="c-genre"><span class="badge ${r.genre}">${GENRE_NAME[r.genre]}</span></td>
         <td class="c-count num">${r.count}×</td>
         <td class="c-key">${r.key ? `<span class="key">${esc(r.key)}</span>` : '<span style="color:#bbb">—</span>'}</td>
@@ -393,6 +393,8 @@
 
   // ---------- repertoire actions ----------
   $('rep').addEventListener('click', async ev => {
+    const h = ev.target.closest('button[data-hist]');
+    if (h) return openHistory(h.dataset.hist);
     const btn = ev.target.closest('button[data-song]'); if (!btn) return;
     const song = songById(btn.dataset.song); if (!song) return;
     const tw = entries.find(e => e.songId === song.id && weekOf(e.date) === thisWeek());
@@ -465,6 +467,51 @@
       dlg.close(); render(); toast(`“${s.song}” borrada del repertorio.`);
     } catch (e) { $('editMsg').textContent = errorText(e); }
   });
+
+  // ---------- song history ----------
+  const hist = $('histDlg');
+  function openHistory(songId) {
+    const s = songById(songId); if (!s) return;
+    const since = addDays(todayStr(), -365);
+    const mine = entries.filter(e => e.songId === songId && e.date >= since)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    const pairs = new Map();
+    const weeksHtml = mine.map(e => {
+      const w = weekOf(e.date);
+      const set = entries.filter(x => weekOf(x.date) === w)
+        .sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''));
+      set.forEach(x => { if (x.songId !== songId) pairs.set(x.songId, (pairs.get(x.songId) || 0) + 1); });
+      return `
+        <div class="hweek">
+          <div class="hweek-h"><span>Semana del ${esc(fmtShort(w))}</span>${e.songOfWeek ? '<span class="hstar">★ Canción de la semana</span>' : ''}</div>
+          <ul>${set.map(x => {
+            const o = songById(x.songId); if (!o) return '';
+            const me = x.songId === songId;
+            return `<li class="${me ? 'me' : ''}"><span class="gdot ${o.genre}"></span>${me
+              ? `<strong>${esc(o.song)}</strong>`
+              : `<button type="button" class="song-link" data-hist="${esc(o.id)}">${esc(o.song)}</button>`}${o.key ? `<span class="key">${esc(o.key)}</span>` : ''}</li>`;
+          }).join('')}</ul>
+        </div>`;
+    }).join('');
+    const top = [...pairs.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+      .map(([id, n]) => { const o = songById(id); return o ? `<button type="button" class="song-link" data-hist="${esc(id)}">${esc(o.song)}</button> <span class="muted">(${n})</span>` : ''; })
+      .filter(Boolean);
+    $('histTitle').innerHTML = esc(s.song);
+    $('histSub').textContent = mine.length
+      ? `${s.artist ? s.artist + ' · ' : ''}${mine.length} ${mine.length === 1 ? 'vez' : 'veces'} en el último año`
+      : `${s.artist ? s.artist + ' · ' : ''}No se ha cantado en el último año`;
+    $('histPairs').hidden = !top.length;
+    $('histPairs').innerHTML = top.length ? `<span class="label">Más acompañada de</span><div>${top.join(' · ')}</div>` : '';
+    $('histBody').innerHTML = weeksHtml || '<p class="empty-note">Sin historial en el último año.</p>';
+    $('histBody').scrollTop = 0;
+    if (!hist.open) hist.showModal();
+  }
+  hist.addEventListener('click', ev => {
+    const b = ev.target.closest('button[data-hist]');
+    if (b) openHistory(b.dataset.hist);
+    else if (ev.target === hist) hist.close();
+  });
+  $('histClose').addEventListener('click', () => hist.close());
 
   // ---------- start ----------
   const remembered = saved.get();
