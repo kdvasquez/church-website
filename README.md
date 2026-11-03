@@ -80,9 +80,12 @@ A private page where the worship team logs the songs sung each week. It is not l
 
 - **Passcode screen:** the whole page asks for the team passcode. Each device remembers it until someone taps **Salir**.
 - **Song of the week:** shown at the top, along with the number of songs in the repertoire.
-- **Adding songs:** date, song, artist (optional), alabanza or adoración, key (optional), and ★ for song of the week.
-  - If the song is already in the repertoire, the page says so and adds the existing song to the week instead of creating a duplicate.
-- **Last 3 weeks:** shows this week, last week and the week before. Older weeks drop off automatically but stay in the repertoire.
+- **Building a week's list ("Armar la lista"):**
+  - Pick the service date, or tap **Este domingo** or **Próximo domingo**. The list for that week shows underneath.
+  - Search the repertoire as you type and tap a song to add it. Songs already in the list show "✓ ya está".
+  - If the song isn't in the repertoire, choose **＋ Nueva canción**, fill in artist, genre and key, and it's added to the repertoire and the list together.
+  - ★ marks the song of the week, and ✕ removes a song from the list.
+- **Last 3 weeks:** shows this week, last week and the week before. If next Sunday's list has been started, it shows next week, this week and last week instead. Older weeks drop off automatically but stay in the repertoire.
   - ★ stars or unstars the song of the week. There's only one per week.
   - ✎ edits a song.
   - ✕ removes a song from that week only.
