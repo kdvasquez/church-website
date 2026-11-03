@@ -140,8 +140,6 @@
   .seg input:checked + label.g-alabanza { background: var(--red); color: #fff; }
   .seg input:checked + label.g-adoracion { background: var(--blue); color: #fff; }
   .seg input:focus-visible + label { outline: 3px solid var(--red); outline-offset: -3px; }
-  .check { display: flex; align-items: center; gap: 0.6rem; margin: 0.25rem 0 1rem; cursor: pointer; font-size: 0.95rem; }
-  .check input { width: 20px; height: 20px; accent-color: var(--red); }
   form .btn { width: 100%; }
 
   /* Chips & badges */
@@ -213,10 +211,6 @@
   .stat-one b { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--red-dark); line-height: 1; }
   .stat-one span { font-size: 0.92rem; color: var(--gray-medium); }
 
-  /* Duplicate notice */
-  .dup { background: #FFF9EC; border: 1px solid #ecd6a4; border-left: 3px solid #D99A1E; padding: 0.85rem 1rem; margin-bottom: 0.9rem; font-size: 0.92rem; }
-  .dup p { margin-bottom: 0.4rem; color: var(--ink); }
-  .dup small { color: var(--gray-medium); display: block; margin-bottom: 0.6rem; }
   .linkish { background: none; border: 0; color: var(--red); text-decoration: underline; cursor: pointer; font-size: 0.9rem; padding: 0.3rem 0; }
 
     .week-note { color: var(--gray-medium); font-size: 0.85rem; margin-top: 0.9rem; font-style: italic; }
@@ -267,6 +261,33 @@
   .hweek li .key { margin-left: auto; }
   .hweek li.me { background: #FFF9EC; }
   .hweek li.me strong { color: var(--red-dark); font-weight: 600; }
+
+  /* Week list builder */
+  .quick { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .quick button { background: #fff; border: 1px solid var(--border-light); padding: 0.35rem 0.75rem; min-height: 36px; cursor: pointer; font-size: 0.85rem; color: var(--gray-dark); }
+  .quick button.on { border-color: var(--red); color: var(--red); background: var(--red-pale); }
+  .blist-head { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Playfair Display', serif; color: var(--red-dark); padding: 0.4rem 0 0.5rem; border-bottom: 2px solid var(--border-light); }
+  .blist-head small { font-family: 'Lora', serif; color: var(--gray-medium); font-size: 0.82rem; }
+  .blist { list-style: none; margin-bottom: 1rem; }
+  .blist li { display: flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0; border-bottom: 1px solid #f1e7d8; }
+  .blist li.sotw-row { background: #FFF9EC; }
+  .blist li .nm { flex: 1; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+  .blist li.none { color: var(--gray-medium); font-style: italic; font-size: 0.9rem; padding: 0.75rem 0; border: 0; }
+  .blist .icon-btn { min-width: 36px; min-height: 36px; }
+  .picker { position: relative; }
+  .sugg { position: absolute; left: 0; right: 0; top: 100%; z-index: 20; list-style: none; background: #fff; border: 1px solid var(--red); border-top: 0; box-shadow: 0 10px 24px rgba(26,0,0,0.12); max-height: 280px; overflow-y: auto; }
+  .sugg li { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.75rem; cursor: pointer; font-size: 0.95rem; min-height: 44px; }
+  .sugg li small { color: var(--gray-medium); font-size: 0.8rem; }
+  .sugg li .grow { flex: 1; min-width: 0; }
+  .sugg li.active, .sugg li:hover { background: var(--red-pale); }
+  .sugg li.in-list { color: var(--gray-medium); cursor: default; }
+  .sugg li.in-list:hover { background: #fff; }
+  .sugg li.create { color: var(--red); border-top: 1px solid #f1e7d8; font-weight: 500; }
+  .newsong { background: #FFF9EC; border: 1px solid #ecd6a4; border-left: 3px solid #D99A1E; padding: 0.9rem 1rem 1rem; margin-top: -0.25rem; }
+  .newsong p { font-size: 0.9rem; margin-bottom: 0.8rem; color: var(--ink); }
+  .newsong .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .ns-actions { display: flex; gap: 0.5rem; }
+  .ns-actions .btn { flex: 1; font-size: 0.92rem; padding: 0.7rem 0.8rem; }
 
   /* Edit dialog */
   dialog { border: 0; padding: 0; width: min(460px, calc(100vw - 2rem)); margin: auto; background: transparent; }
@@ -339,47 +360,47 @@
       </div>
 
       <div class="card">
-        <div class="label">Registrar</div>
-        <h2>Agregar <em>canción</em></h2>
-        <form id="addForm" autocomplete="off">
+        <div class="label">Lista de la semana</div>
+        <h2>Armar la <em>lista</em></h2>
+        <div class="field">
+          <label for="fDate">Fecha del servicio</label>
+          <input type="date" id="fDate" required />
+          <div class="quick" id="quick"></div>
+        </div>
+        <div class="blist-head" id="bHead"></div>
+        <ul class="blist" id="bList"></ul>
+        <div class="field picker">
+          <label for="fSong">Agregar canción</label>
+          <input type="text" id="fSong" maxlength="120" autocomplete="off" placeholder="Busca en el repertorio o escribe una nueva"
+            role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" />
+          <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+        </div>
+        <form class="newsong" id="newSong" autocomplete="off" hidden>
+          <p><strong id="nsName"></strong> no está en el repertorio. Completa los datos para agregarla al repertorio y a la lista.</p>
+          <div class="field">
+            <label for="fArtist">Artista <span class="optional">(opcional)</span></label>
+            <input type="text" id="fArtist" list="artistList" maxlength="120" placeholder="Ej. Marcos Witt" />
+          </div>
           <div class="row">
             <div class="field">
-              <label for="fDate">Fecha</label>
-              <input type="date" id="fDate" required />
+              <span class="lbl" id="genreLbl">Género</span>
+              <div class="seg" role="radiogroup" aria-labelledby="genreLbl">
+                <input type="radio" name="genre" id="gAl" value="alabanza" checked />
+                <label for="gAl" class="g-alabanza">Alabanza</label>
+                <input type="radio" name="genre" id="gAd" value="adoracion" />
+                <label for="gAd" class="g-adoracion">Adoración</label>
+              </div>
             </div>
             <div class="field">
               <label for="fKey">Tono <span class="optional">(opcional)</span></label>
               <input type="text" id="fKey" list="keyList" maxlength="12" placeholder="Ej. G, Am" />
             </div>
           </div>
-          <div class="field">
-            <label for="fSong">Canción</label>
-            <input type="text" id="fSong" list="songList" maxlength="120" required placeholder="Nombre de la canción" />
+          <div class="ns-actions">
+            <button type="button" class="btn-ghost" id="nsCancel">Cancelar</button>
+            <button type="submit" class="btn" id="nsSave">Agregar al repertorio y a la lista</button>
           </div>
-          <div class="dup" id="dup" hidden>
-            <p><strong id="dupName"></strong> ya está en el repertorio.</p>
-            <small>No se duplica: se agrega la misma canción a la semana, con su artista, género y tono.</small>
-            <button type="button" class="linkish" id="dupShow">Ver en el repertorio</button>
-          </div>
-          <div id="newFields">
-          <div class="field">
-            <label for="fArtist">Artista <span class="optional">(opcional)</span></label>
-            <input type="text" id="fArtist" list="artistList" maxlength="120" placeholder="Ej. Marcos Witt" />
-          </div>
-          <div class="field">
-            <span class="lbl" id="genreLbl">Género</span>
-            <div class="seg" role="radiogroup" aria-labelledby="genreLbl">
-              <input type="radio" name="genre" id="gAl" value="alabanza" checked />
-              <label for="gAl" class="g-alabanza">Alabanza</label>
-              <input type="radio" name="genre" id="gAd" value="adoracion" />
-              <label for="gAd" class="g-adoracion">Adoración</label>
-            </div>
-          </div>
-          </div>
-          <label class="check"><input type="checkbox" id="fStar" /> ★ Canción de la semana</label>
-          <button class="btn" type="submit" id="addBtn">Agregar</button>
         </form>
-        <datalist id="songList"></datalist>
         <datalist id="artistList"></datalist>
         <datalist id="keyList">
           <option value="C"><option value="C#"><option value="Db"><option value="D"><option value="Eb"><option value="E">

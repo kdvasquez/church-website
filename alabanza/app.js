@@ -113,8 +113,11 @@
   }
   function shownWeeks() {
     const w0 = thisWeek();
-    return Array.from({ length: WEEKS_SHOWN }, (_, i) => {
-      const w = addDays(w0, -7 * i);
+    const hasNext = entries.some(e => weekOf(e.date) === addDays(w0, 7));
+    const start = hasNext ? 1 : 0;   // a planned list for next Sunday shows first
+    return Array.from({ length: WEEKS_SHOWN }, (_, k) => {
+      const i = start - k;           // 1 = next week, 0 = this week, -1, -2 = past
+      const w = addDays(w0, 7 * i);
       const list = entries.filter(e => weekOf(e.date) === w)
         .sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''));
       return { w, i, list };
@@ -132,14 +135,14 @@
     renderSplit();
     renderStale(rep);
     renderRep(rep);
-    $('songList').innerHTML = songs.map(s => `<option value="${esc(s.song)}">`).join('');
     $('artistList').innerHTML = [...new Set(songs.map(s => s.artist).filter(Boolean))].map(a => `<option value="${esc(a)}">`).join('');
-    checkDup();
+    renderBuilder();
   }
 
   function renderSotw(weeks) {
     let found = null;
-    for (const wk of weeks) { const e = wk.list.find(x => x.songOfWeek); if (e) { found = { wk, e }; break; } }
+    const order = [...weeks].sort((a, b) => (a.i === 0 ? -1 : b.i === 0 ? 1 : b.i - a.i));
+    for (const wk of order) { const e = wk.list.find(x => x.songOfWeek); if (e) { found = { wk, e }; break; } }
     const box = $('sotw');
     if (!found) {
       box.innerHTML = `<div class="label">Canción de la semana</div><h2>Sin elegir todavía</h2>
@@ -148,14 +151,14 @@
     }
     const { wk, e } = found;
     const s = songById(e.songId);
-    const when = wk.i === 0 ? 'esta semana' : 'semana del ' + fmtDayMonth(wk.w);
+    const when = wk.i === 0 ? 'esta semana' : wk.i === 1 ? 'próximo domingo' : 'semana del ' + fmtDayMonth(wk.w);
     box.innerHTML = `<div class="label">Canción de la semana · ${esc(when)}</div>
       <h2>${esc(s.song)}</h2>
       ${s.artist ? `<div class="who">${esc(s.artist)}</div>` : ''}
       <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(e.date))}</span></div>`;
   }
 
-  const WEEK_TITLES = ['Esta semana', 'Semana pasada', 'Hace 2 semanas'];
+  const WEEK_TITLES = { 1: 'Próxima semana', 0: 'Esta semana', '-1': 'Semana pasada', '-2': 'Hace 2 semanas' };
   const fmtDM = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', '');
   function renderWeeks(weeks) {
     $('weeks').innerHTML = weeks.map(({ w, i, list }) => `
@@ -315,51 +318,131 @@
     $('repEmpty').hidden = rows.length > 0;
   }
 
-  // ---------- add form ----------
+  // ---------- week list builder ----------
+  const nextSunday = () => addDays(thisWeek(), 7);
   $('fDate').value = todayStr();
-  function checkDup() {
-    const match = $('fSong').value.trim() ? findByName($('fSong').value) : null;
-    $('dup').hidden = !match;
-    $('newFields').hidden = !!match;
-    if (match) {
-      $('dupName').textContent = `“${match.song}”`;
-      $('addBtn').textContent = 'Agregar a la semana';
-    } else {
-      $('addBtn').textContent = 'Agregar';
-    }
-    return match;
+  const builderWeek = () => weekOf($('fDate').value || todayStr());
+  const builderEntries = () => entries.filter(e => weekOf(e.date) === builderWeek())
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''));
+  let suggItems = [];
+  let suggActive = 0;
+
+  function renderBuilder() {
+    const w = builderWeek();
+    $('quick').innerHTML = [
+      ['this', 'Este domingo · ' + fmtDM(thisWeek()), thisWeek()],
+      ['next', 'Próximo domingo · ' + fmtDM(nextSunday()), nextSunday()],
+    ].map(([k, label, d]) => `<button type="button" data-date="${d}" class="${w === d ? 'on' : ''}">${esc(label)}</button>`).join('');
+    const list = builderEntries();
+    $('bHead').innerHTML = `<span>Semana del ${esc(fmtDayMonth(w))}</span><small>${list.length} ${list.length === 1 ? 'canción' : 'canciones'}</small>`;
+    $('bList').innerHTML = list.length ? list.map(e => {
+      const s = songById(e.songId);
+      return `<li class="${e.songOfWeek ? 'sotw-row' : ''}">
+        <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-entry="${esc(e.id)}" aria-pressed="${e.songOfWeek}"
+          title="Canción de la semana" aria-label="Canción de la semana: ${esc(s.song)}">★</button>
+        <span class="gdot ${s.genre}" title="${GENRE_NAME[s.genre]}"></span>
+        <span class="nm">${esc(s.song)}</span>
+        ${s.key ? `<span class="key">${esc(s.key)}</span>` : ''}
+        <button type="button" class="icon-btn del" data-entry="${esc(e.id)}" title="Quitar de la lista" aria-label="Quitar de la lista: ${esc(s.song)}">✕</button>
+      </li>`;
+    }).join('') : '<li class="none">La lista está vacía. Busca una canción abajo para empezar.</li>';
   }
-  $('fSong').addEventListener('input', checkDup);
-  $('dupShow').addEventListener('click', () => {
-    const m = findByName($('fSong').value); if (!m) return;
-    $('q').value = m.song; $('fGenre').value = ''; repPage = 1; renderRep(repertoire());
-    $('rep').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-  $('addForm').addEventListener('submit', async ev => {
-    ev.preventDefault();
-    const btn = $('addBtn'); btn.disabled = true;
-    const date = $('fDate').value, star = $('fStar').checked;
-    const match = checkDup();
+
+  function renderSugg() {
+    const raw = $('fSong').value.trim();
+    const q = norm(raw);
+    if (!q) { $('sugg').hidden = true; $('fSong').setAttribute('aria-expanded', 'false'); suggItems = []; return; }
+    const inList = new Set(builderEntries().map(e => e.songId));
+    const matches = songs.filter(s => norm(s.song + ' ' + (s.artist || '')).includes(q))
+      .sort((a, b) => (norm(a.song).startsWith(q) ? 0 : 1) - (norm(b.song).startsWith(q) ? 0 : 1) || a.song.localeCompare(b.song, 'es'))
+      .slice(0, 6);
+    suggItems = matches.map(s => ({ type: inList.has(s.id) ? 'in' : 'song', song: s }));
+    if (!findByName(raw)) suggItems.push({ type: 'create', name: raw });
+    suggActive = Math.max(0, suggItems.findIndex(x => x.type !== 'in'));
+    $('sugg').innerHTML = suggItems.map((it, i) => {
+      if (it.type === 'create') return `<li role="option" class="create ${i === suggActive ? 'active' : ''}" data-i="${i}">＋ Nueva canción: “${esc(it.name)}”</li>`;
+      const s = it.song;
+      return `<li role="option" class="${it.type === 'in' ? 'in-list' : ''} ${i === suggActive ? 'active' : ''}" data-i="${i}" aria-disabled="${it.type === 'in'}">
+        <span class="gdot ${s.genre}"></span><span class="grow">${esc(s.song)}${s.artist ? ` <small>· ${esc(s.artist)}</small>` : ''}</span>
+        ${it.type === 'in' ? '<small>✓ ya está</small>' : (s.key ? `<span class="key">${esc(s.key)}</span>` : '')}</li>`;
+    }).join('');
+    $('sugg').hidden = false;
+    $('fSong').setAttribute('aria-expanded', 'true');
+  }
+
+  async function pick(i) {
+    const it = suggItems[i]; if (!it || it.type === 'in') return;
+    $('sugg').hidden = true;
+    if (it.type === 'create') {
+      $('nsName').textContent = `“${it.name}”`;
+      $('newSong').dataset.name = it.name;
+      $('newSong').hidden = false;
+      $('fArtist').focus();
+      return;
+    }
     try {
-      if (match) {
-        const r = await run(() => api('POST', { action: 'sing', songId: match.id, date, songOfWeek: star }));
-        toast(r.alreadyThisWeek
-          ? `“${match.song}” ya estaba en esa semana${star ? '; ahora es la canción de la semana' : ''}.`
-          : `“${match.song}” agregada a la semana.`);
-      } else {
-        await run(() => api('POST', {
-          action: 'addSong', date, songOfWeek: star,
-          song: $('fSong').value, artist: $('fArtist').value, key: $('fKey').value,
-          genre: document.querySelector('input[name=genre]:checked').value,
-        }));
-        toast(`“${$('fSong').value.trim()}” agregada al repertorio y a la semana.`);
-      }
-      $('fSong').value = ''; $('fArtist').value = ''; $('fKey').value = ''; $('fStar').checked = false;
+      const r = await run(() => api('POST', { action: 'sing', songId: it.song.id, date: $('fDate').value, songOfWeek: false }));
+      toast(r.alreadyThisWeek ? `“${it.song.song}” ya estaba en la lista.` : `“${it.song.song}” agregada a la lista.`);
+      $('fSong').value = '';
+      render();
+      $('fSong').focus();
+    } catch {}
+  }
+
+  $('fSong').addEventListener('input', () => { $('newSong').hidden = true; renderSugg(); });
+  $('fSong').addEventListener('focus', renderSugg);
+  $('fSong').addEventListener('keydown', ev => {
+    if ($('sugg').hidden || !suggItems.length) return;
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+      ev.preventDefault();
+      const dir = ev.key === 'ArrowDown' ? 1 : -1;
+      let n = suggActive;
+      for (let k = 0; k < suggItems.length; k++) { n = (n + dir + suggItems.length) % suggItems.length; if (suggItems[n].type !== 'in') break; }
+      suggActive = n;
+      $('sugg').querySelectorAll('li').forEach((li, i) => li.classList.toggle('active', i === suggActive));
+    } else if (ev.key === 'Enter') { ev.preventDefault(); pick(suggActive); }
+    else if (ev.key === 'Escape') { $('sugg').hidden = true; }
+  });
+  $('sugg').addEventListener('mousedown', ev => ev.preventDefault()); // keep focus in the input
+  $('sugg').addEventListener('click', ev => { const li = ev.target.closest('li[data-i]'); if (li) pick(+li.dataset.i); });
+  document.addEventListener('click', ev => { if (!ev.target.closest('.picker')) $('sugg').hidden = true; });
+
+  $('newSong').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const btn = $('nsSave'); btn.disabled = true;
+    const name = $('newSong').dataset.name;
+    try {
+      await run(() => api('POST', {
+        action: 'addSong', date: $('fDate').value, songOfWeek: false,
+        song: name, artist: $('fArtist').value, key: $('fKey').value,
+        genre: document.querySelector('input[name=genre]:checked').value,
+      }));
+      toast(`“${name}” agregada al repertorio y a la lista.`);
+      $('newSong').hidden = true; $('fSong').value = ''; $('fArtist').value = ''; $('fKey').value = '';
       render();
       $('fSong').focus();
     } catch (e) {
       if (e.message === 'exists') { await api('GET').catch(() => {}); render(); }
     } finally { btn.disabled = false; }
+  });
+  $('nsCancel').addEventListener('click', () => { $('newSong').hidden = true; $('fSong').focus(); });
+
+  $('fDate').addEventListener('change', () => { $('newSong').hidden = true; renderBuilder(); });
+  $('quick').addEventListener('click', ev => {
+    const b = ev.target.closest('button[data-date]'); if (!b) return;
+    $('fDate').value = b.dataset.date; renderBuilder();
+  });
+  $('bList').addEventListener('click', async ev => {
+    const btn = ev.target.closest('button[data-entry]'); if (!btn) return;
+    const entry = entries.find(e => e.id === btn.dataset.entry); if (!entry) return;
+    try {
+      if (btn.classList.contains('star')) await toggleEntryStar(entry);
+      else if (btn.classList.contains('del')) {
+        await run(() => api('DELETE', { action: 'entry', id: entry.id }));
+        toast(`“${songById(entry.songId)?.song}” quitada de la lista.`);
+        render();
+      }
+    } catch {}
   });
 
   // ---------- star (shared) ----------
