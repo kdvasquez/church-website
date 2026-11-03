@@ -7,7 +7,6 @@
 <!-- Primary SEO -->
 <title>Iglesia de Dios Pentecostal M.I. Soledad | Church in Soledad, CA</title>
 <meta name="description" content="Iglesia de Dios Pentecostal M.I. Soledad — a Spanish-speaking Christian church in Soledad, California. Join us for Sunday service, Wednesday prayer, and Bible study. Todos son bienvenidos." />
-<meta name="keywords" content="Soledad church, iglesia en Soledad, Soledad Christian church, Pentecostal church Soledad CA, iglesia cristiana Soledad California, Iglesia de Dios Pentecostal M.I." />
 <link rel="canonical" href="https://iddpmisoledad.netlify.app/" />
 
 <!-- Open Graph (Facebook, WhatsApp link previews) -->
@@ -66,7 +65,6 @@
     --space-sm: 1rem;
     --space-md: 1.5rem;
     --space-lg: 2rem;
-    --space-xl: 2.5rem;
     --space-2xl: 3rem;
     --space-3xl: 4rem;
     --space-4xl: 5rem;
@@ -165,10 +163,6 @@
     transition: transform 0.3s;
   }
 
-  .nav-links a:hover {
-    color: var(--red);
-  }
-
   .nav-links a:hover::after {
     transform: scaleX(1);
   }
@@ -215,7 +209,7 @@
   /* HERO SECTION                                                    */
   /* ═══════════════════════════════════════════════════════════════ */
   #home {
-    height: calc(100vh - 140px);
+    height: calc(100vh - var(--nav-height, 140px));
     min-height: 760px;
     margin-top: var(--nav-height, 140px);
     position: relative;
@@ -667,10 +661,6 @@
     transform: translateY(-2px);
   }
 
-  .value-bullet {
-    display: none;
-  }
-
   .value-item strong {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
@@ -1066,7 +1056,7 @@
     nav .logo-img { width: 56px; }
     .nav-links { flex-wrap: wrap; gap: 16px; margin-top: 16px; }
     nav:not(.menu-ready) { position: static; }
-    nav:not(.menu-ready) + #home { margin-top: 0; }
+    nav:not(.menu-ready) + main #home { margin-top: 0; }
 
     .menu-ready .nav-links {
       display: none;
@@ -1106,10 +1096,6 @@
 
     .collage-frame {
       display: none;
-    }
-
-    .collage-badge {
-      right: 0;
     }
 
     .contact-inner {
@@ -1194,7 +1180,7 @@
 <body>
 
 <!-- NAV -->
-<a class="skip-link" href="#home">Saltar al contenido</a>
+<a class="skip-link" href="#main">Saltar al contenido</a>
 <nav id="navbar" aria-label="Navegación principal">
   <a href="#home" class="nav-logo">
     <img src="img/churchlogo-removebg-preview.png" alt="Logo de IDDPMI Soledad" class="logo-img">
@@ -1212,8 +1198,10 @@
   </button>
 </nav>
 
+<main id="main" tabindex="-1">
+
 <!-- HERO -->
-<section id="home" tabindex="-1">
+<section id="home">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -1309,15 +1297,12 @@
 
     <div class="about-values reveal">
       <a href="https://www.biblegateway.com/passage/?search=Deuteronomio%2032%3A4&version=RVR1960" target="_blank" rel="noopener" class="value-item">
-        <div class="value-bullet"></div>
         <div><strong>Un Dios Santo</strong><span>Creemos en un Dios santo, fiel, justo y misericordioso.</span><cite>Deuteronomio 32:4 →</cite></div>
       </a>
       <a href="https://www.biblegateway.com/passage/?search=Mateo%2028%3A19&version=RVR1960" target="_blank" rel="noopener" class="value-item">
-        <div class="value-bullet"></div>
         <div><strong>La Santa Trinidad</strong><span>Creemos en el Padre, Hijo y Espíritu Santo como uno, en la comunión con los santos en cada servicio.</span><cite>Mateo 28:19 →</cite></div>
       </a>
       <a href="https://www.biblegateway.com/passage/?search=Mateo%205%3A16&version=RVR1960" target="_blank" rel="noopener" class="value-item">
-        <div class="value-bullet"></div>
         <div><strong>Testimonio Vivo</strong><span>Creemos que como hijos de Dios, nuestro propósito es enseñarle al mundo con nuestro carácter y comportamiento que Dios ha transformado nuestras vidas.</span><cite>Mateo 5:16 →</cite></div>
       </a>
     </div>
@@ -1443,6 +1428,8 @@
     </form>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
