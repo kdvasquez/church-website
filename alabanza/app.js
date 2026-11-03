@@ -4,6 +4,8 @@
   const GENRE_NAME = { alabanza: 'Alabanza', adoracion: 'Adoración' };
   const SERIES = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)'];
   const WEEKS_SHOWN = 3;
+  const PAGE_SIZE = 10;
+  let repPage = 1;
   const $ = id => document.getElementById(id);
 
   let passcode = '';
@@ -277,9 +279,18 @@
     if (!songs.length) {
       $('rep').innerHTML = `<tr><td colspan="6" class="empty-note">El repertorio se llenará solo conforme agregues canciones.</td></tr>`;
       $('repEmpty').hidden = true;
+      $('pager').hidden = true;
       return;
     }
-    $('rep').innerHTML = rows.map(r => {
+    const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    repPage = Math.min(Math.max(1, repPage), pages);
+    const from = (repPage - 1) * PAGE_SIZE;
+    const pageRows = rows.slice(from, from + PAGE_SIZE);
+    $('pager').hidden = pages <= 1;
+    $('pageInfo').textContent = `${from + 1}–${from + pageRows.length} de ${rows.length} · página ${repPage} de ${pages}`;
+    $('prevPage').disabled = repPage <= 1;
+    $('nextPage').disabled = repPage >= pages;
+    $('rep').innerHTML = pageRows.map(r => {
       const tw = r.thisWeekEntry;
       return `
       <tr>
@@ -318,7 +329,7 @@
   $('fSong').addEventListener('input', checkDup);
   $('dupShow').addEventListener('click', () => {
     const m = findByName($('fSong').value); if (!m) return;
-    $('q').value = m.song; $('fGenre').value = ''; renderRep(repertoire());
+    $('q').value = m.song; $('fGenre').value = ''; repPage = 1; renderRep(repertoire());
     $('rep').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   $('addForm').addEventListener('submit', async ev => {
@@ -400,7 +411,10 @@
       }
     } catch {}
   });
-  ['q', 'fGenre', 'sort'].forEach(id => $(id).addEventListener('input', () => renderRep(repertoire())));
+  ['q', 'fGenre', 'sort'].forEach(id => $(id).addEventListener('input', () => { repPage = 1; renderRep(repertoire()); }));
+  const goPage = d => { repPage += d; renderRep(repertoire()); $('rep').closest('section').scrollIntoView({ block: 'start' }); };
+  $('prevPage').addEventListener('click', () => goPage(-1));
+  $('nextPage').addEventListener('click', () => goPage(1));
 
   // ---------- edit dialog ----------
   const dlg = $('editDlg');
