@@ -150,14 +150,14 @@
     }
     const { wk, e } = found;
     const s = songById(e.songId);
-    const when = wk.i === 0 ? 'esta semana' : wk.i === 1 ? 'próximo domingo' : 'semana del ' + fmtDayMonth(wk.w);
+    const when = wk.i === 0 ? 'este domingo' : wk.i === 1 ? 'próximo domingo' : 'semana del ' + fmtDayMonth(wk.w);
     box.innerHTML = `<div class="label">Canción de la semana · ${esc(when)}</div>
       <h2>${esc(s.song)}</h2>
       ${s.artist ? `<div class="who">${esc(s.artist)}</div>` : ''}
       <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(e.date))}</span></div>`;
   }
 
-  const WEEK_TITLES = { 1: 'Próxima semana', 0: 'Esta semana', '-1': 'Semana pasada', '-2': 'Hace 2 semanas' };
+  const WEEK_TITLES = { 1: 'Próximo domingo', 0: 'Este domingo', '-1': 'Semana pasada', '-2': 'Hace dos semanas' };
   const fmtDM = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', '');
   function renderWeeks(weeks) {
     $('weeks').innerHTML = weeks.map(({ w, i, list }) => `
@@ -306,11 +306,11 @@
         <td class="c-last">${r.last ? esc(fmtShort(r.last)) : '—'}<span class="ago">${esc(ago(r.last))}</span></td>
         <td class="c-act"><div class="row-actions">
           <button type="button" class="icon-btn star ${tw && tw.songOfWeek ? 'on' : ''}" data-song="${esc(r.id)}"
-            aria-pressed="${!!(tw && tw.songOfWeek)}" title="Canción de esta semana"
-            aria-label="Canción de esta semana: ${esc(r.song)}">★</button>
+            aria-pressed="${!!(tw && tw.songOfWeek)}" title="Canción de este domingo"
+            aria-label="Canción de este domingo: ${esc(r.song)}">★</button>
           ${tw
-            ? `<button type="button" class="icon-btn add done" title="Ya está en esta semana" aria-label="${esc(r.song)} ya está en esta semana" disabled>✓</button>`
-            : `<button type="button" class="icon-btn add" data-song="${esc(r.id)}" title="Agregar a esta semana" aria-label="Agregar a esta semana: ${esc(r.song)}">+</button>`}
+            ? `<button type="button" class="icon-btn add done" title="Ya está en este domingo" aria-label="${esc(r.song)} ya está en este domingo" disabled>✓</button>`
+            : `<button type="button" class="icon-btn add" data-song="${esc(r.id)}" title="Agregar a este domingo" aria-label="Agregar a este domingo: ${esc(r.song)}">+</button>`}
           <button type="button" class="icon-btn edit" data-song="${esc(r.id)}" title="Editar" aria-label="Editar: ${esc(r.song)}">✎</button>
         </div></td>
       </tr>`; }).join('');
@@ -319,7 +319,7 @@
 
   // ---------- week list builder ----------
   const nextSunday = () => addDays(thisWeek(), 7);
-  $('fDate').value = todayStr();
+  $('fDate').value = thisWeek();
   const builderWeek = () => weekOf($('fDate').value || todayStr());
   const builderEntries = () => entries.filter(e => weekOf(e.date) === builderWeek())
     .sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || '').localeCompare(b.createdAt || ''));
@@ -485,15 +485,15 @@
       if (btn.classList.contains('star')) {
         if (tw) await toggleEntryStar(tw);
         else {
-          await run(() => api('POST', { action: 'sing', songId: song.id, date: todayStr(), songOfWeek: true }));
-          toast(`“${song.song}” es la canción de esta semana.`);
+          await run(() => api('POST', { action: 'sing', songId: song.id, date: thisWeek(), songOfWeek: true }));
+          toast(`“${song.song}” es la canción de este domingo.`);
           render();
         }
         return;
       }
       if (btn.classList.contains('add')) {
-        await run(() => api('POST', { action: 'sing', songId: song.id, date: todayStr(), songOfWeek: false }));
-        toast(`“${song.song}” agregada a esta semana.`);
+        await run(() => api('POST', { action: 'sing', songId: song.id, date: thisWeek(), songOfWeek: false }));
+        toast(`“${song.song}” agregada a este domingo.`);
         render();
       }
     } catch {}
@@ -548,6 +548,24 @@
       await api('DELETE', { action: 'song', id: s.id });
       dlg.close(); render(); toast(`“${s.song}” borrada del repertorio.`);
     } catch (e) { $('editMsg').textContent = errorText(e); }
+  });
+
+  // ---------- CSV backup ----------
+  $('csvBtn').addEventListener('click', () => {
+    const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const rows = [['Fecha', 'Semana del', 'Canción', 'Artista', 'Género', 'Tono', 'Canción de la semana']];
+    [...entries].sort((a, b) => b.date.localeCompare(a.date)).forEach(e => {
+      const s = songById(e.songId); if (!s) return;
+      rows.push([e.date, weekOf(e.date), s.song, s.artist, GENRE_NAME[s.genre], s.key, e.songOfWeek ? 'Sí' : '']);
+    });
+    songs.filter(s => !entries.some(e => e.songId === s.id))
+      .forEach(s => rows.push(['', '', s.song, s.artist, GENRE_NAME[s.genre], s.key, '']));
+    const csv = '﻿' + rows.map(r => r.map(cell).join(',')).join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `alabanza-${todayStr()}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
 
   // ---------- song history ----------

@@ -95,7 +95,7 @@ A private page where the worship team logs the songs sung each week. It is not l
   - Search the repertoire as you type and tap a song to add it. Songs already in the list show "✓ ya está".
   - If the song isn't in the repertoire, choose **＋ Nueva canción**, fill in artist, genre and key, and it's added to the repertoire and the list together.
   - ★ marks the song of the week, and ✕ removes a song from the list.
-- **Last 3 weeks:** shows this week, last week and the week before. If next Sunday's list has been started, it shows next week, this week and last week instead. Older weeks drop off automatically but stay in the repertoire.
+- **Last 3 weeks:** shows "Este domingo", "Semana pasada" and "Hace dos semanas". If next Sunday's list has been started, it shows "Próximo domingo", "Este domingo" and "Semana pasada" instead. Older weeks drop off automatically but stay in the repertoire.
   - ★ stars or unstars the song of the week. There's only one per week.
   - ✎ edits a song.
   - ✕ removes a song from that week only.
@@ -103,7 +103,8 @@ A private page where the worship team logs the songs sung each week. It is not l
 - **Repertoire:** every song, with how many times it was sung, its key, and when it was last sung.
   - It can be searched, filtered by genre and sorted.
   - It shows 10 songs per page.
-  - ★ makes a song this week's song of the week. **+** adds it to this week, and ✓ means it's already there.
+  - ★ makes a song the song of the week for this Sunday. **+** adds it to this Sunday, and ✓ means it's already there.
+  - **⤓ Descargar copia** downloads every song and date as a CSV file that opens in Excel or Google Sheets. Keep a copy now and then as a backup.
   - ✎ edits a song. The editor can also delete a song from the repertoire, along with its history.
 - **Song history:** tapping a song's name shows every week it was sung in the last year, with the other songs from that set, and the songs it's most often paired with. Older history stays saved and is only hidden from this view.
 - **Charts:**
