@@ -20,11 +20,6 @@
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-cache"
 
-[[headers]]
-  for = "/site.webmanifest"
-  [headers.values]
-    Content-Type = "application/manifest+json"
-
 # Repository files that shouldn't be served on the website
 [[redirects]]
   from = "/README.md"
@@ -39,12 +34,6 @@
   force = true
 
 [[redirects]]
-  from = "/tests/*"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
   from = "/netlify/*"
   to = "/404"
   status = 404
@@ -52,12 +41,6 @@
 
 [[redirects]]
   from = "/package.json"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/package-lock.json"
   to = "/404"
   status = 404
   force = true

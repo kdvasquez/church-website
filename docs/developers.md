@@ -50,18 +50,17 @@ How the church website and the worship team page are built. For day-to-day admin
 index.html                    Public website (styles and scripts inline)
 gracias.html                  Contact form confirmation page (noindex)
 img/                          Photos, logo, link preview image (share.jpg, 1200×630)
-favicon.ico, img/icons/       Logo icons; site.webmanifest lists them for phones
+favicon.ico, img/icons/       Logo icons (browser tabs, phone home screens)
 alabanza/index.html           Worship page markup and styles (noindex)
 alabanza/app.js               Worship page behavior
 netlify/functions/songs.mjs   Worship API: passcode check, rules and storage
 netlify.toml                  Publish settings, headers, functions folder, blocked paths
-package.json                  @netlify/blobs dependency and the test script
-tests/songs.test.mjs          API tests (node:test)
+package.json                  @netlify/blobs dependency for the function
 docs/                         These guides
 robots.txt, sitemap.xml       Search engine settings
 ```
 
-`README.md`, `docs/`, `tests/`, `netlify/` and `package*.json` are blocked from being served on the website by redirects in `netlify.toml`.
+`README.md`, `docs/`, `netlify/` and `package.json` are blocked from being served on the website by redirects in `netlify.toml`.
 
 ## Worship API
 
@@ -76,7 +75,6 @@ Every request must send the passcode in the `x-passcode` header. Request and res
 | `PATCH` | `{ action: "editEntry", id, date }` | Moves a logged song to another date. Returns **409** if the song is already in that week. |
 | `DELETE` | `{ action: "entry", id }` | Removes one logged date. The song stays in the repertoire. |
 | `DELETE` | `{ action: "song", id }` | Deletes a song and all its logged dates. |
-| `PATCH` | `{ action: "star", id, value }` | Left over from the removed song-of-the-week feature. The page no longer uses it. |
 
 - `genre` is `"alabanza"` or `"adoracion"`, and `date` is `YYYY-MM-DD`.
 - Other status codes: **400** invalid input, **401** wrong passcode (with a 0.5 s delay to slow down guessing), **404** unknown id, **503** `WORSHIP_PASSCODE` not set.
@@ -95,18 +93,13 @@ Every request must send the passcode in the `x-passcode` header. Request and res
 - **Migrations run on load and are idempotent.** The first converts the original format, where song details were stored on each entry, into songs plus entries. The second moves weekday-dated entries from the old Sunday-to-Saturday rule onto their Sunday, once.
 - Old fields such as `songOfWeek` may remain on saved entries. They're ignored.
 
-## Tests
+## Checking changes
 
-```bash
-npm install      # once
-npm test         # runs tests/songs.test.mjs with Node's built-in test runner (Node 18+)
-```
-
-The tests call the function directly with an in-memory store, covering the passcode, adding, duplicates, editing, deleting, input validation and both migrations. There are no automated tests for the page itself, so check it by hand on a deploy preview, on both phone and desktop.
+There are no automated tests, to keep the project simple. After changing the worship API or page, try it on a deploy preview (see below) on both phone and desktop: add a song, add an existing song, edit, remove from a week, delete, and check the repertoire and song history.
 
 ## Making changes
 
-1. Create a branch, make the change, and run `npm test` if you touched the API.
+1. Create a branch and make the change.
 2. Open a pull request. Netlify posts a **deploy preview** link. The worship page there uses the separate `worship-preview` store with the same passcode, so try things freely.
 3. Merge into `main`, and Netlify deploys to production in about a minute.
 4. To undo a bad deploy, go to Netlify → **Deploys**, open a previous deploy, and click **Publish deploy**. Blobs data isn't affected by rollbacks.

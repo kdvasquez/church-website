@@ -2,7 +2,7 @@
 //
 // Data lives in Netlify Blobs:
 //   s/<id>  a song in the repertoire: { id, song, artist, genre, key, createdAt }
-//   e/<id>  one time a song was sung:  { id, songId, date, songOfWeek, createdAt }
+//   e/<id>  one time a song was sung:  { id, songId, date, createdAt }
 // Production uses the "worship" store; deploy previews and branch deploys use
 // "worship-preview", so trying out a preview never touches the real list.
 //
@@ -116,7 +116,7 @@ async function migrate(store, songs, entries) {
   }
   for (const e of old) {
     await store.setJSON(`e/${e.id}`, {
-      id: e.id, songId: e._songId, date: e.date, songOfWeek: !!e.songOfWeek, createdAt: e.createdAt || "",
+      id: e.id, songId: e._songId, date: e.date, createdAt: e.createdAt || "",
     });
   }
   return true;
@@ -135,31 +135,13 @@ async function load(store) {
   return { songs, entries: entries.filter((e) => ids.has(e.songId)) };
 }
 
-// Only one song of the week per week.
-async function setStar(store, entries, entry, value) {
-  if (value) {
-    const w = weekOf(entry.date);
-    for (const e of entries) {
-      if (e.id !== entry.id && e.songOfWeek && weekOf(e.date) === w) {
-        e.songOfWeek = false;
-        await store.setJSON(`e/${e.id}`, e);
-      }
-    }
-  }
-  entry.songOfWeek = value;
-  await store.setJSON(`e/${entry.id}`, entry);
-}
-
-async function addEntry(store, entries, songId, date, star) {
+// A song is logged at most once per week.
+async function addEntry(store, entries, songId, date) {
   const existing = entries.find((e) => e.songId === songId && weekOf(e.date) === weekOf(date));
-  if (existing) {
-    if (star) await setStar(store, entries, existing, true);
-    return { entry: existing, alreadyThisWeek: true };
-  }
-  const entry = { id: randomUUID(), songId, date, songOfWeek: false, createdAt: new Date().toISOString() };
+  if (existing) return { entry: existing, alreadyThisWeek: true };
+  const entry = { id: randomUUID(), songId, date, createdAt: new Date().toISOString() };
   entries.push(entry);
   await store.setJSON(`e/${entry.id}`, entry);
-  if (star) await setStar(store, entries, entry, true);
   return { entry, alreadyThisWeek: false };
 }
 
@@ -199,13 +181,13 @@ export default async function handler(req, context, storeOverride) {
       if (dup) return json(409, { error: "exists", song: dup });
       const song = { id: randomUUID(), ...f, createdAt: new Date().toISOString() };
       await store.setJSON(`s/${song.id}`, song);
-      await addEntry(store, entries, song.id, body.date, body.songOfWeek === true);
+      await addEntry(store, entries, song.id, body.date);
       return json(201, await load(store));
     }
     // A repertoire song was sung on `date` (no duplicates within a week).
     case "POST sing": {
       if (!findSong(body.songId) || !validDate(body.date)) return json(400, { error: "invalid" });
-      const r = await addEntry(store, entries, body.songId, body.date, body.songOfWeek === true);
+      const r = await addEntry(store, entries, body.songId, body.date);
       return json(200, { ...(await load(store)), alreadyThisWeek: r.alreadyThisWeek });
     }
     case "PATCH editSong": {
@@ -225,13 +207,6 @@ export default async function handler(req, context, storeOverride) {
       if (clash) return json(409, { error: "already_that_week" });
       entry.date = body.date;
       await store.setJSON(`e/${entry.id}`, entry);
-      if (entry.songOfWeek) await setStar(store, entries, entry, true);
-      return json(200, await load(store));
-    }
-    case "PATCH star": {
-      const entry = findEntry(body.id);
-      if (!entry) return json(404, { error: "not_found" });
-      await setStar(store, entries, entry, body.value === true);
       return json(200, await load(store));
     }
     // Remove one time sung; the song stays in the repertoire.

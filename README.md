@@ -129,7 +129,7 @@ When someone else takes over, give them access to each account:
 
 ## For developers
 
-How the website is built, how the worship page stores its songs, how to run the tests, and how to make changes safely: **[docs/developers.md](docs/developers.md)**.
+How the website is built, how the worship page stores its songs, and how to make changes safely: **[docs/developers.md](docs/developers.md)**.
 
 ---
 
