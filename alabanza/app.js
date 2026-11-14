@@ -128,7 +128,6 @@
     const rep = repertoire();
     const weeks = shownWeeks();
     $('stRep').textContent = songs.length;
-    renderSotw(weeks);
     renderWeeks(weeks);
     renderChart(rep);
     renderSplit();
@@ -136,25 +135,6 @@
     renderRep(rep);
     $('artistList').innerHTML = [...new Set(songs.map(s => s.artist).filter(Boolean))].map(a => `<option value="${esc(a)}">`).join('');
     renderBuilder();
-  }
-
-  function renderSotw(weeks) {
-    let found = null;
-    const order = [...weeks].sort((a, b) => (a.i === 0 ? -1 : b.i === 0 ? 1 : b.i - a.i));
-    for (const wk of order) { const e = wk.list.find(x => x.songOfWeek); if (e) { found = { wk, e }; break; } }
-    const box = $('sotw');
-    if (!found) {
-      box.innerHTML = `<div class="label">Canción de la semana</div><h2>Sin elegir todavía</h2>
-        <p class="empty">Toca la estrella ★ de una canción, en la semana o en el repertorio, para que aparezca aquí.</p>`;
-      return;
-    }
-    const { wk, e } = found;
-    const s = songById(e.songId);
-    const when = wk.i === 0 ? 'este domingo' : wk.i === 1 ? 'próximo domingo' : 'semana del ' + fmtDayMonth(wk.w);
-    box.innerHTML = `<div class="label">Canción de la semana · ${esc(when)}</div>
-      <h2>${esc(s.song)}</h2>
-      ${s.artist ? `<div class="who">${esc(s.artist)}</div>` : ''}
-      <div class="meta"><span>${GENRE_NAME[s.genre]}</span>${s.key ? `<span>Tono: ${esc(s.key)}</span>` : ''}<span>${esc(fmtShort(e.date))}</span></div>`;
   }
 
   const WEEK_TITLES = { 1: 'Próximo domingo', 0: 'Este domingo', '-1': 'Semana pasada', '-2': 'Hace dos semanas' };
@@ -167,9 +147,7 @@
           const s = songById(e.songId);
           const confirm = pendingDelete === e.id;
           return `
-          <li class="${e.songOfWeek ? 'sotw-row' : ''}">
-            <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-entry="${esc(e.id)}"
-              aria-pressed="${e.songOfWeek}" title="Canción de la semana" aria-label="Canción de la semana: ${esc(s.song)}">★</button>
+          <li>
             <span class="gdot ${s.genre}" title="${GENRE_NAME[s.genre]}" aria-label="${GENRE_NAME[s.genre]}"></span>
             <div class="song-main">
               <strong>${esc(s.song)}</strong>
@@ -305,9 +283,6 @@
         <td class="c-key">${r.key ? `<span class="key">${esc(r.key)}</span>` : '<span style="color:#bbb">—</span>'}</td>
         <td class="c-last">${r.last ? esc(fmtShort(r.last)) : '—'}<span class="ago">${esc(ago(r.last))}</span></td>
         <td class="c-act"><div class="row-actions">
-          <button type="button" class="icon-btn star ${tw && tw.songOfWeek ? 'on' : ''}" data-song="${esc(r.id)}"
-            aria-pressed="${!!(tw && tw.songOfWeek)}" title="Canción de este domingo"
-            aria-label="Canción de este domingo: ${esc(r.song)}">★</button>
           ${tw
             ? `<button type="button" class="icon-btn add done" title="Ya está en este domingo" aria-label="${esc(r.song)} ya está en este domingo" disabled>✓</button>`
             : `<button type="button" class="icon-btn add" data-song="${esc(r.id)}" title="Agregar a este domingo" aria-label="Agregar a este domingo: ${esc(r.song)}">+</button>`}
@@ -336,9 +311,7 @@
     $('bHead').innerHTML = `<span>Semana del ${esc(fmtDayMonth(w))}</span><small>${list.length} ${list.length === 1 ? 'canción' : 'canciones'}</small>`;
     $('bList').innerHTML = list.length ? list.map(e => {
       const s = songById(e.songId);
-      return `<li class="${e.songOfWeek ? 'sotw-row' : ''}">
-        <button type="button" class="icon-btn star ${e.songOfWeek ? 'on' : ''}" data-entry="${esc(e.id)}" aria-pressed="${e.songOfWeek}"
-          title="Canción de la semana" aria-label="Canción de la semana: ${esc(s.song)}">★</button>
+      return `<li>
         <span class="gdot ${s.genre}" title="${GENRE_NAME[s.genre]}"></span>
         <span class="nm">${esc(s.song)}</span>
         ${s.key ? `<span class="key">${esc(s.key)}</span>` : ''}
@@ -380,7 +353,7 @@
       return;
     }
     try {
-      const r = await run(() => api('POST', { action: 'sing', songId: it.song.id, date: $('fDate').value, songOfWeek: false }));
+      const r = await run(() => api('POST', { action: 'sing', songId: it.song.id, date: $('fDate').value }));
       toast(r.alreadyThisWeek ? `“${it.song.song}” ya estaba en la lista.` : `“${it.song.song}” agregada a la lista.`);
       $('fSong').value = '';
       render();
@@ -412,7 +385,7 @@
     const name = $('newSong').dataset.name;
     try {
       await run(() => api('POST', {
-        action: 'addSong', date: $('fDate').value, songOfWeek: false,
+        action: 'addSong', date: $('fDate').value,
         song: name, artist: $('fArtist').value, key: $('fKey').value,
         genre: document.querySelector('input[name=genre]:checked').value,
       }));
@@ -435,8 +408,7 @@
     const btn = ev.target.closest('button[data-entry]'); if (!btn) return;
     const entry = entries.find(e => e.id === btn.dataset.entry); if (!entry) return;
     try {
-      if (btn.classList.contains('star')) await toggleEntryStar(entry);
-      else if (btn.classList.contains('del')) {
+      if (btn.classList.contains('del')) {
         await run(() => api('DELETE', { action: 'entry', id: entry.id }));
         toast(`“${songById(entry.songId)?.song}” quitada de la lista.`);
         render();
@@ -444,17 +416,10 @@
     } catch {}
   });
 
-  // ---------- star (shared) ----------
-  async function toggleEntryStar(entry) {
-    await run(() => api('PATCH', { action: 'star', id: entry.id, value: !entry.songOfWeek }));
-    render();
-  }
-
   // ---------- week list actions ----------
   $('weeks').addEventListener('click', async ev => {
     const btn = ev.target.closest('button[data-entry]'); if (!btn) return;
     const entry = entries.find(e => e.id === btn.dataset.entry); if (!entry) return;
-    if (btn.classList.contains('star')) return toggleEntryStar(entry).catch(() => {});
     if (btn.classList.contains('edit')) return openEdit(entry.songId, entry.id);
     if (btn.classList.contains('del')) {
       if (pendingDelete !== entry.id) {
@@ -482,17 +447,8 @@
     const tw = entries.find(e => e.songId === song.id && weekOf(e.date) === thisWeek());
     try {
       if (btn.classList.contains('edit')) return openEdit(song.id, null);
-      if (btn.classList.contains('star')) {
-        if (tw) await toggleEntryStar(tw);
-        else {
-          await run(() => api('POST', { action: 'sing', songId: song.id, date: thisWeek(), songOfWeek: true }));
-          toast(`“${song.song}” es la canción de este domingo.`);
-          render();
-        }
-        return;
-      }
       if (btn.classList.contains('add')) {
-        await run(() => api('POST', { action: 'sing', songId: song.id, date: thisWeek(), songOfWeek: false }));
+        await run(() => api('POST', { action: 'sing', songId: song.id, date: thisWeek() }));
         toast(`“${song.song}” agregada a este domingo.`);
         render();
       }
@@ -553,13 +509,13 @@
   // ---------- CSV backup ----------
   $('csvBtn').addEventListener('click', () => {
     const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const rows = [['Fecha', 'Semana del', 'Canción', 'Artista', 'Género', 'Tono', 'Canción de la semana']];
+    const rows = [['Fecha', 'Semana del', 'Canción', 'Artista', 'Género', 'Tono']];
     [...entries].sort((a, b) => b.date.localeCompare(a.date)).forEach(e => {
       const s = songById(e.songId); if (!s) return;
-      rows.push([e.date, weekOf(e.date), s.song, s.artist, GENRE_NAME[s.genre], s.key, e.songOfWeek ? 'Sí' : '']);
+      rows.push([e.date, weekOf(e.date), s.song, s.artist, GENRE_NAME[s.genre], s.key]);
     });
     songs.filter(s => !entries.some(e => e.songId === s.id))
-      .forEach(s => rows.push(['', '', s.song, s.artist, GENRE_NAME[s.genre], s.key, '']));
+      .forEach(s => rows.push(['', '', s.song, s.artist, GENRE_NAME[s.genre], s.key]));
     const csv = '﻿' + rows.map(r => r.map(cell).join(',')).join('\r\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
@@ -583,7 +539,7 @@
       set.forEach(x => { if (x.songId !== songId) pairs.set(x.songId, (pairs.get(x.songId) || 0) + 1); });
       return `
         <div class="hweek">
-          <div class="hweek-h"><span>Semana del ${esc(fmtShort(w))}</span>${e.songOfWeek ? '<span class="hstar">★ Canción de la semana</span>' : ''}</div>
+          <div class="hweek-h"><span>Semana del ${esc(fmtShort(w))}</span></div>
           <ul>${set.map(x => {
             const o = songById(x.songId); if (!o) return '';
             const me = x.songId === songId;
