@@ -34,11 +34,31 @@ function passcodeOk(given) {
   return timingSafeEqual(a, b);
 }
 
-// Sunday that starts the week containing a YYYY-MM-DD date.
+// Each week is named by its Sunday: Monday through Sunday belong to that
+// Sunday, so "este domingo" is always the coming Sunday (or today on Sundays).
 export function weekOf(date) {
   const d = new Date(`${date}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+  d.setUTCDate(d.getUTCDate() + ((7 - d.getUTCDay()) % 7));
   return d.toISOString().slice(0, 10);
+}
+
+// Weeks used to run Sunday to Saturday. Songs saved on a weekday under that
+// rule belonged to the Sunday before, so move them onto that Sunday once,
+// keeping every list exactly as the team saw it.
+async function migrateWeekRule(store, entries) {
+  if (await store.get("meta/weeks-end-on-sunday", { type: "json" })) return false;
+  let changed = false;
+  for (const e of entries) {
+    const d = new Date(`${e.date}T12:00:00Z`);
+    if (d.getUTCDay() !== 0) {
+      d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+      e.date = d.toISOString().slice(0, 10);
+      await store.setJSON(`e/${e.id}`, e);
+      changed = true;
+    }
+  }
+  await store.setJSON("meta/weeks-end-on-sunday", { at: new Date().toISOString() });
+  return changed;
 }
 
 // Same song regardless of accents, capitals, punctuation or extra spaces.
@@ -106,6 +126,9 @@ async function load(store) {
   let [songs, entries] = await Promise.all([readAll(store, "s/"), readAll(store, "e/")]);
   if (await migrate(store, songs, entries)) {
     [songs, entries] = await Promise.all([readAll(store, "s/"), readAll(store, "e/")]);
+  }
+  if (await migrateWeekRule(store, entries)) {
+    entries = await readAll(store, "e/");
   }
   // drop entries whose song no longer exists
   const ids = new Set(songs.map((s) => s.id));

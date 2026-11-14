@@ -28,7 +28,8 @@
   const fmtDayMonth = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
   const fmtShort = d => toDate(d).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   const todayStr = () => { const n = new Date(); return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
-  const weekOf = d => { const x = toDate(d); x.setUTCDate(x.getUTCDate() - x.getUTCDay()); return x.toISOString().slice(0, 10); };
+  // a week is named by its Sunday: Monday–Sunday belong to that Sunday
+  const weekOf = d => { const x = toDate(d); x.setUTCDate(x.getUTCDate() + ((7 - x.getUTCDay()) % 7)); return x.toISOString().slice(0, 10); };
   const addDays = (d, n) => { const x = toDate(d); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
   const thisWeek = () => weekOf(todayStr());
   function ago(d) {

@@ -95,7 +95,7 @@ A private page where the worship team logs the songs sung each week. It is not l
   - Search the repertoire as you type and tap a song to add it. Songs already in the list show "✓ ya está".
   - If the song isn't in the repertoire, choose **＋ Nueva canción**, fill in artist, genre and key, and it's added to the repertoire and the list together.
   - ✕ removes a song from the list.
-- **Last 3 weeks:** shows "Este domingo", "Semana pasada" and "Hace dos semanas". If next Sunday's list has been started, it shows "Próximo domingo", "Este domingo" and "Semana pasada" instead. Older weeks drop off automatically but stay in the repertoire.
+- **Last 3 weeks:** shows "Este domingo" (the coming Sunday, or today on a Sunday), "Semana pasada" and "Hace dos semanas". Each week runs Monday through Sunday and is named by its Sunday. If next Sunday's list has been started, it shows "Próximo domingo", "Este domingo" and "Semana pasada" instead. Older weeks drop off automatically but stay in the repertoire.
   - ✎ edits a song.
   - ✕ removes a song from that week only.
   - A colored dot marks the genre: red for alabanza, blue for adoración.
