@@ -37,6 +37,8 @@ alabanza/app.js               Worship dashboard behavior
 netlify/functions/songs.mjs   Worship dashboard API (passcode check and storage)
 netlify.toml                  Netlify settings, security headers, functions folder
 package.json                  Dependency for the function (@netlify/blobs)
+favicon.ico, img/icons/       Church logo icons (browser tab, phone home screen, Google results)
+site.webmanifest              Name, colors and icons for phones
 robots.txt, sitemap.xml       Search engine settings
 ```
 
@@ -71,6 +73,14 @@ If this repository is already connected to a Netlify project, use that project i
 The contact number is **831-287-7965** throughout the site.
 
 The site currently references `https://iddpmisoledad.netlify.app/`. Confirm that this is your published address, or update the URLs in `index.html`, `robots.txt`, and `sitemap.xml` to match.
+
+## Search engines and icons
+
+- The homepage is open to search engines: `robots.txt` allows everything and points to `sitemap.xml`, and the page has a title, description, link-preview tags, and church details (address, phone, logo) that Google can read.
+- The thank-you page and the worship dashboard are marked so search engines skip them.
+- The church logo is the icon everywhere: `favicon.ico` for browser tabs, `img/icons/icon-192.png` for Google results, and `img/icons/apple-touch-icon.png` for iPhone home screens.
+- **To get found faster on Google:** add the site in [Google Search Console](https://search.google.com/search-console) (choose **URL prefix** and enter `https://iddpmisoledad.netlify.app/`), verify it, then submit `sitemap.xml` under **Sitemaps** and use **URL inspection → Request indexing** on the homepage. [Bing Webmaster Tools](https://www.bing.com/webmasters) can import the site from Search Console.
+- When the homepage changes a lot, update `<lastmod>` in `sitemap.xml`.
 
 ## Worship team dashboard (`/alabanza`)
 

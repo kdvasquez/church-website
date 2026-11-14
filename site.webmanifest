@@ -1,0 +1,13 @@
+{
+  "name": "Iglesia de Dios Pentecostal M.I. Soledad",
+  "short_name": "IDDPMI Soledad",
+  "lang": "es",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FDF6F6",
+  "theme_color": "#CE0100",
+  "icons": [
+    { "src": "/img/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/img/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
