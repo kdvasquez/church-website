@@ -2,6 +2,12 @@
 
 This is the church's website, plus a private page where the worship team keeps track of the songs they sing. This guide is written for whoever looks after the website. You don't need to know how to code to use it.
 
+**Guides**
+
+- This page covers the website and the accounts behind it.
+- [Worship team page guide](docs/worship-team.md) covers the Equipo de Alabanza page.
+- [Developer guide](docs/developers.md) covers how everything is built, for someone who codes.
+
 - **Church website:** https://iddpmisoledad.netlify.app/
 - **Worship team page:** https://iddpmisoledad.netlify.app/alabanza/ (needs the team passcode)
 
@@ -85,41 +91,9 @@ Google usually lists a new website within a few days to a few weeks.
 
 ## Worship team page (Equipo de Alabanza)
 
-**Address:** https://iddpmisoledad.netlify.app/alabanza/
+A private page where the worship team plans each Sunday's songs and keeps track of their repertoire: https://iddpmisoledad.netlify.app/alabanza/
 
-This is a private page for the worship team. It isn't linked from the website and doesn't show up on Google. Everything on it is in Spanish.
-
-### How the team uses it
-
-- **Getting in:** enter the team passcode. The phone or computer remembers it until someone taps **Salir**.
-- **Planning a Sunday (Armar la lista):**
-  1. Tap **Este domingo** (the coming Sunday) or **Próximo domingo** (the Sunday after that). You can also pick any date.
-  2. Type a song's name. Songs already in the repertoire appear as you type. Tap one to add it.
-  3. If the song is new, tap **＋ Nueva canción**, fill in the artist, alabanza or adoración, and the key, and it's added to the repertoire and the list at once.
-  4. Tap **✕** to take a song off the list.
-- **The last 3 weeks:** shows **Este domingo**, **Semana pasada** and **Hace dos semanas**. Older weeks disappear from this section by themselves, but nothing is deleted: every song stays in the repertoire.
-  - A red dot means alabanza, and a blue dot means adoración.
-  - ✎ fixes a song's details. On a computer, hover over a song to see ✎ and ✕.
-- **The repertoire (Todas las canciones):** every song the team has sung, with how many times, the key, and when it was last sung.
-  - Search, filter and sort the list. It shows 10 songs at a time.
-  - **+** adds a song to this Sunday. **✓** means it's already there.
-  - Tap a song's **name** to see every Sunday it was sung in the past year and which songs were sung with it.
-  - **✎** edits a song. Deleting a song from the repertoire entirely is in that same window.
-- **Charts:** the most-sung songs, the balance between alabanza and adoración, and songs that haven't been sung in a while.
-
-### Keep a backup
-
-The songs are stored only in Netlify. Every month or two, open the worship page and click **⤓ Descargar copia** next to the repertoire search. It downloads a file with every song and date, which opens in Excel or Google Sheets. Keep it somewhere safe, like the church's Google Drive.
-
-### Change the team passcode
-
-1. Sign in to [Netlify](https://app.netlify.com/) and open the church's project.
-2. Go to **Project configuration → Environment variables**.
-3. Find **`WORSHIP_PASSCODE`**, click it, and change the value. Use something long that's hard to guess.
-4. Go to **Deploys** and click **Trigger deploy → Deploy site**.
-5. After 1–2 minutes the new passcode works, and everyone is asked for it the next time they open the page.
-
-Anyone who has the passcode can see and change the song list, so share it only with the worship team.
+It has its own guide, covering how the team uses it, how to keep a backup of the songs, and how to change the passcode: **[docs/worship-team.md](docs/worship-team.md)**.
 
 ---
 
@@ -146,8 +120,8 @@ When someone else takes over, give them access to each account:
 - [ ] **Google Calendar:** share the church calendar with them, with permission to make changes.
 - [ ] **Facebook:** make them an admin of the church's Facebook page.
 - [ ] **Google Search Console** (if set up): add them as an owner.
-- [ ] Tell them the **worship team passcode**, or have them change it (see above).
-- [ ] Download a fresh **backup** of the worship songs (see above).
+- [ ] Tell them the **worship team passcode**, or have them change it ([how](docs/worship-team.md#change-the-team-passcode)).
+- [ ] Download a fresh **backup** of the worship songs ([how](docs/worship-team.md#keep-a-backup)).
 
 > Netlify and GitHub sometimes rename their menus. If a button isn't where this guide says, search their help pages for the task, for example "Netlify invite team member".
 
@@ -155,48 +129,7 @@ When someone else takes over, give them access to each account:
 
 ## For developers
 
-Everything below is technical detail for someone comfortable with code.
-
-**Tech stack**
-
-| Part | What it uses |
-|---|---|
-| Public website | Plain HTML, CSS and JavaScript, with no framework and no build step |
-| Hosting | Netlify, deployed automatically from the `main` branch. Pull requests get deploy previews at `https://deploy-preview-<number>--iddpmisoledad.netlify.app`. |
-| Contact form | Netlify Forms (form name `contact`), with a honeypot field. It redirects to `gracias.html`. |
-| Events and messages | Embedded Google Calendar and Facebook Page Plugin. The Facebook embed currently shows only the page header, without posts. That's on Facebook's side; the code follows their instructions. |
-| Worship page | `alabanza/index.html` and `alabanza/app.js`. The charts are hand-drawn SVG, with no libraries. |
-| Worship data | A Netlify Function at `/api/songs` (`netlify/functions/songs.mjs`, Node.js) that stores data in Netlify Blobs. Its only dependency is `@netlify/blobs`. |
-| Access | A shared passcode in the `WORSHIP_PASSCODE` environment variable, sent in the `x-passcode` header |
-| Fonts | Google Fonts: Playfair Display, Lora and Cormorant Garamond |
-| Headers | Security and indexing headers are set in `netlify.toml` |
-
-**Files**
-
-```
-index.html                    Public website (styles and scripts inline)
-gracias.html                  Contact form confirmation page (noindex)
-img/                          Photos, logo, link preview image (share.jpg)
-favicon.ico, img/icons/       Logo icons; site.webmanifest lists them for phones
-alabanza/                     Worship page (noindex)
-netlify/functions/songs.mjs   Worship API: passcode check and storage
-netlify.toml                  Publish settings, headers, functions folder
-package.json                  @netlify/blobs dependency for the function
-robots.txt, sitemap.xml       Search engine settings
-```
-
-**Worship data model**
-
-- `s/<id>` holds a repertoire song: `{ id, song, artist, genre, key }`.
-- `e/<id>` holds one time a song was sung: `{ id, songId, date }`.
-- Weeks run Monday through Sunday and are named by their Sunday.
-- Production uses the `worship` store. Deploy previews and branch deploys use `worship-preview`, so testing a preview never touches the real list.
-- Old fields such as `songOfWeek` may remain in saved data. They're no longer shown.
-- `meta/weeks-end-on-sunday` marks a one-time date migration that has already run.
-
-**Running it locally:** open `index.html` directly in a browser to see the public website. The worship page needs its function, so run it with the Netlify CLI (`netlify dev`) or use a deploy preview.
-
-**Search engines:** the homepage is indexable, with title, description, Open Graph and Twitter tags, and `Church` structured data. When the homepage changes significantly, update `<lastmod>` in `sitemap.xml`. If the site moves to a new domain, update the URLs in `index.html`, `robots.txt` and `sitemap.xml`.
+How the website is built, how the worship page stores its songs, how to run the tests, and how to make changes safely: **[docs/developers.md](docs/developers.md)**.
 
 ---
 
